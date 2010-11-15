@@ -108,18 +108,28 @@ declare function local:create-databases(
     return $config
 };
 
+declare function local:setup-test-resources(){
+(: Ugly :)
+let $config := local:create-databases(admin:get-configuration(), ("unit-test-db", "unit-test-modules") )
+let $config := local:create-forests($config, ("unit-test-forest01", "unit-test-modules-forest01") )
+let $config := (admin:save-configuration($config), $config)
+let $config := admin:database-attach-forest($config, xdmp:database("unit-test-db"), xdmp:forest("unit-test-forest01") )
+let $config := admin:database-attach-forest($config, xdmp:database("unit-test-modules"), xdmp:forest("unit-test-modules-forest01") )
+return admin:save-configuration($config)
+};
 
-(: step one - create database and forest :)
-
+(: step one - create databases and forests :)
+local:setup-test-resources()
 (: 
 let $config := local:create-databases(admin:get-configuration(), ("unit-test-db", "unit-test-modules") )
 :)
 (:let $config := local:create-databases(admin:get-configuration(), ("new-test-db4", "new-test-db5", "new-test-db6"))
 return admin:save-configuration($config)
 :)
-
+(:
 let $config := local:create-forests(admin:get-configuration(), ("new-forest1", "new-forest2"))
 return admin:save-configuration($config)
+:)
 (: step two - add uri lexicon (unless this can be done at the time) :)
 
 (: step three - insert a bunch of random docs into the new db for testing :)
