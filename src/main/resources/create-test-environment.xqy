@@ -130,7 +130,7 @@ declare function local:create-databases(
 
 declare function local:delete-forest(
     $config as element(configuration), 
-    $ForestName as xs:string) (:as element(configuration):)
+    $ForestName as xs:string) as element(configuration)
     {
     try {
 
@@ -157,7 +157,29 @@ declare function local:delete-forest(
     }
 };
 
-declare function local:delete-database(){};
+declare function local:delete-database(      
+    $config as element(configuration), 
+    $DatabaseName as xs:string) as element(configuration) 
+    {
+    try {
+         let $database := admin:database-get-id($config, $DatabaseName)
+    (: Get all of the existing databases :)
+         let $ExistingDatabases :=
+             for $id in admin:get-database-ids($config)
+                return admin:database-get-name($config, $id)
+
+    (: Check to see if database exists. If so, remove the database :)
+         let $config :=
+            if ($DatabaseName = $ExistingDatabases) 
+            then admin:database-delete(
+                   $config, 
+                   admin:database-get-id($config, $DatabaseName))
+            else $config
+         return $config
+    } catch($e) {
+         xdmp:log($e)
+    }
+};
 
 declare function local:delete-forests(
       $config as element(configuration), 
@@ -169,7 +191,15 @@ declare function local:delete-forests(
     return $config
 };
 
-declare function local:delete-databases(){};
+declare function local:delete-databases(
+      $config as element(configuration), 
+      $databases as xs:string+)
+    {
+    for $database in $databases
+    let $config := local:delete-database($config, $database)
+    let $config := (admin:save-configuration($config), $config)
+    return $config
+};
 
 declare function local:detach-forest(
     $config as element(configuration), 
@@ -196,6 +226,7 @@ declare function local:setup-test-resources(){
     let $config := admin:database-set-uri-lexicon($config, xdmp:database($TEST_DB), fn:true())
     let $config := (admin:save-configuration($config), $config)
     let $config := admin:database-attach-forest($config, xdmp:database($TEST_DB), xdmp:forest($TEST_FOREST) )
+    let $config := (admin:save-configuration($config), $config)
     let $config := admin:database-attach-forest($config, xdmp:database($TEST_DB_MODULES), xdmp:forest($TEST_FOREST_MODULES) )
     return admin:save-configuration($config)
 };
@@ -209,6 +240,7 @@ declare function local:teardown-test-resources(){
     let $config := local:detach-forest($config, $TEST_DB_MODULES, $TEST_FOREST_MODULES) 
     let $config := (admin:save-configuration($config), $config)
     let $config := local:delete-forests($config, ($TEST_FOREST, $TEST_FOREST_MODULES)) 
+    let $config := local:delete-databases($config, ($TEST_DB, $TEST_DB_MODULES)) 
     return admin:save-configuration($config) 
 };
 
@@ -221,4 +253,4 @@ declare function local:teardown-test-resources(){
 
 
 (: step four - remove databases and forests :)
-local:teardown-test-resources() 
+(:local:teardown-test-resources() :)
