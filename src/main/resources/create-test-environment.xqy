@@ -100,23 +100,21 @@ declare function local:create-database(
 
 declare function local:create-forests(
       $config as element(configuration), 
-      $NewForests as xs:string+) as element(configuration)
+      $NewForests as xs:string+) 
     {
     for $NewForest in $NewForests
-    let $config := local:create-forest($config, $NewForest)
-    let $config := (admin:save-configuration($config), $config)
-    return $config
+        let $config := local:create-forest($config, $NewForest)
+        return (admin:save-configuration($config), $config)
+        
 };
 
 
 declare function local:create-databases(
       $config as element(configuration), 
-      $NewDatabases as xs:string+) as element(configuration)
+      $NewDatabases as xs:string+) 
     {
-    for $NewDatabase in $NewDatabases
-    let $config := local:create-database($config, $NewDatabase)
-    let $config := (admin:save-configuration($config), $config)
-    return $config
+        for $NewDatabase in $NewDatabases
+            return local:create-database($config, $NewDatabase)  
 };
 
 (:
@@ -187,8 +185,7 @@ declare function local:delete-forests(
     {
     for $forest in $forests
     let $config := local:delete-forest($config, $forest)
-    let $config := (admin:save-configuration($config), $config)
-    return $config
+    return (admin:save-configuration($config), $config)
 };
 
 declare function local:delete-databases(
@@ -197,8 +194,7 @@ declare function local:delete-databases(
     {
     for $database in $databases
     let $config := local:delete-database($config, $database)
-    let $config := (admin:save-configuration($config), $config)
-    return $config
+    return (admin:save-configuration($config), $config)
 };
 
 declare function local:detach-forest(
@@ -221,19 +217,30 @@ declare function local:detach-forest(
 
 (:~
  : The function that does all the work...
+ : TODO = attach forest doesn't work properly if a forest is already attached..
  :)
 declare function local:setup-test-resources(){
-    let $log := xdmp:log("setting up...")
-    let $config := local:create-databases(admin:get-configuration(), ($TEST_DB, $TEST_DB_MODULES) )
-    let $config := local:create-forests($config, ($TEST_FOREST, $TEST_FOREST_MODULES) )
+    let $log := xdmp:log("Setting up...")
+    let $config := admin:get-configuration()
+    let $log := xdmp:log("1. creating dbs")
+    let $config := local:create-database($config, $TEST_DB)
+    let $config := local:create-database($config, $TEST_DB_MODULES) 
+    (:let $log := xdmp:log(fn:concat("- DATABASES Created: ", xdmp:database($TEST_DB), ", ", xdmp:database($TEST_DB_MODULES))) :)
+    let $log := xdmp:log("2. creating forests")
+    let $config := local:create-forest($config, $TEST_FOREST)
+    let $config := local:create-forest($config, $TEST_FOREST_MODULES) 
+    let $log := xdmp:log("3. Saving...")
+    let $config := (admin:save-configuration($config), $config)
+    (:let $log := xdmp:log(fn:concat("- FORESTS Created: ", xdmp:forest($TEST_FOREST), ", ", xdmp:forest($TEST_FOREST_MODULES))):)
     (: Enable the URI lexicon on the test-db for CORB :)
+    let $log := xdmp:log("4. Enabling URI Lexicon on db")
     let $config := admin:database-set-uri-lexicon($config, xdmp:database($TEST_DB), fn:true())
-    let $config := (admin:save-configuration($config), $config)
+    let $log := xdmp:log("5. Attaching Test DB forests...")
     let $config := admin:database-attach-forest($config, xdmp:database($TEST_DB), xdmp:forest($TEST_FOREST) )
-    let $config := (admin:save-configuration($config), $config)
+    let $log := xdmp:log("6. Attaching Test DB MODULE forests...")
     let $config := admin:database-attach-forest($config, xdmp:database($TEST_DB_MODULES), xdmp:forest($TEST_FOREST_MODULES) )
-    let $config := (admin:save-configuration($config), $config)
-    return $config
+    let $log := xdmp:log("7. Saving...")
+    return (admin:save-configuration($config), $config)
 };
 
 (:~
