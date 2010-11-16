@@ -3,6 +3,17 @@ xquery version "1.0-ml";
 import module namespace admin = "http://marklogic.com/xdmp/admin" 
           at "/MarkLogic/admin.xqy";
 
+(:
+ : GLOBAL VARIABLES
+ :)
+ 
+declare variable $TEST_DB as xs:string := "unit-test-db";
+declare variable $TEST_DB_MODULES as xs:string := "unit-test-modules";
+declare variable $TEST_FOREST as xs:string := "unit-test-forest01";
+declare variable $TEST_FOREST_MODULES as xs:string := "unit-test-modules-forest01";
+
+
+
 declare function local:clone-database(  $config,
                                         $source-database-name,
                                         $target-database-name,
@@ -108,30 +119,106 @@ declare function local:create-databases(
     return $config
 };
 
-declare function local:setup-test-resources(){
-(: Ugly :)
-let $config := local:create-databases(admin:get-configuration(), ("unit-test-db", "unit-test-modules") )
-let $config := local:create-forests($config, ("unit-test-forest01", "unit-test-modules-forest01") )
-let $config := (admin:save-configuration($config), $config)
-let $config := admin:database-attach-forest($config, xdmp:database("unit-test-db"), xdmp:forest("unit-test-forest01") )
-let $config := admin:database-attach-forest($config, xdmp:database("unit-test-modules"), xdmp:forest("unit-test-modules-forest01") )
-return admin:save-configuration($config)
+(:
+ :
+ :
+ :              TEARDOWN UNIT TEST MODULE CODE BELOW:
+ :
+ :
+ :
+ :)
+
+declare function local:delete-forest(
+    $config as element(configuration), 
+    $ForestName as xs:string) (:as element(configuration):)
+    {
+    try {
+
+         let $forest := admin:forest-get-id($config, $ForestName)
+
+    (: Get all of the existing forests :)
+         let $ExistingForests :=
+             for $id in admin:get-forest-ids($config)
+                return admin:forest-get-name($config, $id)
+
+    (: Check to see if forest exists. If so, remove the forest :)
+         let $config :=
+            if ($ForestName = $ExistingForests) 
+            then admin:forest-delete(
+                   $config, 
+                   admin:forest-get-id($config, $ForestName),
+                   fn:true())
+            else $config
+
+         return $config
+
+    } catch($e) {
+         xdmp:log($e)
+    }
 };
 
-(: step one - create databases and forests :)
-local:setup-test-resources()
-(: 
-let $config := local:create-databases(admin:get-configuration(), ("unit-test-db", "unit-test-modules") )
-:)
-(:let $config := local:create-databases(admin:get-configuration(), ("new-test-db4", "new-test-db5", "new-test-db6"))
-return admin:save-configuration($config)
-:)
-(:
-let $config := local:create-forests(admin:get-configuration(), ("new-forest1", "new-forest2"))
-return admin:save-configuration($config)
-:)
-(: step two - add uri lexicon (unless this can be done at the time) :)
+declare function local:delete-database(){};
 
-(: step three - insert a bunch of random docs into the new db for testing :)
+declare function local:delete-forests(
+      $config as element(configuration), 
+      $forests as xs:string+)
+    {
+    for $forest in $forests
+    let $config := local:delete-forest($config, $forest)
+    let $config := (admin:save-configuration($config), $config)
+    return $config
+};
 
-(: step four - create an application server and modules db for testing :)
+declare function local:delete-databases(){};
+
+declare function local:detach-forest(
+    $config as element(configuration), 
+    $db-name as xs:string,
+    $forest-name as xs:string) (:as element(configuration):)
+    {  
+    try {
+        let $config := admin:database-detach-forest($config, xdmp:database($db-name), xdmp:forest($forest-name) )
+        return $config
+    } catch($e) {
+         xdmp:log($e)
+    }
+};
+
+
+(:~
+ : The function that does all the work...
+ :)
+declare function local:setup-test-resources(){
+    let $log := xdmp:log("setting up...")
+    let $config := local:create-databases(admin:get-configuration(), ($TEST_DB, $TEST_DB_MODULES) )
+    let $config := local:create-forests($config, ($TEST_FOREST, $TEST_FOREST_MODULES) )
+    (: Enable the URI lexicon on the test-db for CORB :)
+    let $config := admin:database-set-uri-lexicon($config, xdmp:database($TEST_DB), fn:true())
+    let $config := (admin:save-configuration($config), $config)
+    let $config := admin:database-attach-forest($config, xdmp:database($TEST_DB), xdmp:forest($TEST_FOREST) )
+    let $config := admin:database-attach-forest($config, xdmp:database($TEST_DB_MODULES), xdmp:forest($TEST_FOREST_MODULES) )
+    return admin:save-configuration($config)
+};
+
+(:~
+ : The function that tears down...
+ :)
+declare function local:teardown-test-resources(){
+    let $log := xdmp:log("tearing down...")    
+    let $config := local:detach-forest(admin:get-configuration(), $TEST_DB, $TEST_FOREST) 
+    let $config := local:detach-forest($config, $TEST_DB_MODULES, $TEST_FOREST_MODULES) 
+    let $config := (admin:save-configuration($config), $config)
+    let $config := local:delete-forests($config, ($TEST_FOREST, $TEST_FOREST_MODULES)) 
+    return admin:save-configuration($config) 
+};
+
+(: step one - create databases and forests and add lexicons :)
+(:local:setup-test-resources():)
+
+(: step two - insert a bunch of random docs into the new db for testing :)
+
+(: step three - create an application server and modules db for testing :)
+
+
+(: step four - remove databases and forests :)
+local:teardown-test-resources() 
