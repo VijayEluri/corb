@@ -100,7 +100,7 @@ declare function local:create-database(
 
 declare function local:create-forests(
       $config as element(configuration), 
-      $NewForests as xs:string+)
+      $NewForests as xs:string+) as element(configuration)
     {
     for $NewForest in $NewForests
     let $config := local:create-forest($config, $NewForest)
@@ -111,7 +111,7 @@ declare function local:create-forests(
 
 declare function local:create-databases(
       $config as element(configuration), 
-      $NewDatabases as xs:string+)
+      $NewDatabases as xs:string+) as element(configuration)
     {
     for $NewDatabase in $NewDatabases
     let $config := local:create-database($config, $NewDatabase)
@@ -193,7 +193,7 @@ declare function local:delete-forests(
 
 declare function local:delete-databases(
       $config as element(configuration), 
-      $databases as xs:string+)
+      $databases as xs:string+) as element(configuration)
     {
     for $database in $databases
     let $config := local:delete-database($config, $database)
@@ -204,10 +204,14 @@ declare function local:delete-databases(
 declare function local:detach-forest(
     $config as element(configuration), 
     $db-name as xs:string,
-    $forest-name as xs:string) (:as element(configuration):)
+    $forest-name as xs:string) as element(configuration)
     {  
     try {
-        let $config := admin:database-detach-forest($config, xdmp:database($db-name), xdmp:forest($forest-name) )
+        let $forests := admin:database-get-attached-forests($config, xdmp:database($db-name)) 
+        let $config := 
+            if (xdmp:forest($forest-name) = $forests) 
+            then admin:database-detach-forest($config, xdmp:database($db-name), xdmp:forest($forest-name) )
+            else $config
         return $config
     } catch($e) {
          xdmp:log($e)
@@ -228,7 +232,8 @@ declare function local:setup-test-resources(){
     let $config := admin:database-attach-forest($config, xdmp:database($TEST_DB), xdmp:forest($TEST_FOREST) )
     let $config := (admin:save-configuration($config), $config)
     let $config := admin:database-attach-forest($config, xdmp:database($TEST_DB_MODULES), xdmp:forest($TEST_FOREST_MODULES) )
-    return admin:save-configuration($config)
+    let $config := (admin:save-configuration($config), $config)
+    return $config
 };
 
 (:~
@@ -237,11 +242,13 @@ declare function local:setup-test-resources(){
 declare function local:teardown-test-resources(){
     let $log := xdmp:log("tearing down...")    
     let $config := local:detach-forest(admin:get-configuration(), $TEST_DB, $TEST_FOREST) 
+    let $config := (admin:save-configuration($config), $config)
     let $config := local:detach-forest($config, $TEST_DB_MODULES, $TEST_FOREST_MODULES) 
     let $config := (admin:save-configuration($config), $config)
     let $config := local:delete-forests($config, ($TEST_FOREST, $TEST_FOREST_MODULES)) 
     let $config := local:delete-databases($config, ($TEST_DB, $TEST_DB_MODULES)) 
-    return admin:save-configuration($config) 
+    let $config := (admin:save-configuration($config), $config)
+    return $config 
 };
 
 (: step one - create databases and forests and add lexicons :)
