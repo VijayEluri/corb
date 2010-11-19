@@ -229,7 +229,7 @@ declare function local:setup-test-resources(){
     let $log := xdmp:log("2. creating forests")
     let $config := local:create-forest($config, $TEST_FOREST)
     let $config := local:create-forest($config, $TEST_FOREST_MODULES) 
-    let $log := xdmp:log("3. Saving...")
+    let $log := xdmp:log("3. Saving configuration")
     let $config := (admin:save-configuration($config), $config)
     (:let $log := xdmp:log(fn:concat("- FORESTS Created: ", xdmp:forest($TEST_FOREST), ", ", xdmp:forest($TEST_FOREST_MODULES))):)
     (: Enable the URI lexicon on the test-db for CORB :)
@@ -239,32 +239,87 @@ declare function local:setup-test-resources(){
     let $config := admin:database-attach-forest($config, xdmp:database($TEST_DB), xdmp:forest($TEST_FOREST) )
     let $log := xdmp:log("6. Attaching Test DB MODULE forests...")
     let $config := admin:database-attach-forest($config, xdmp:database($TEST_DB_MODULES), xdmp:forest($TEST_FOREST_MODULES) )
-    let $log := xdmp:log("7. Saving...")
-    return (admin:save-configuration($config), $config)
+    let $log := xdmp:log("7. Saving configuration")
+    let $config := (admin:save-configuration($config), $config)
+    let $log := xdmp:log("Setup Complete")
+    return $config
 };
 
 (:~
  : The function that tears down...
  :)
 declare function local:teardown-test-resources(){
-    let $log := xdmp:log("tearing down...")    
-    let $config := local:detach-forest(admin:get-configuration(), $TEST_DB, $TEST_FOREST) 
-    let $config := (admin:save-configuration($config), $config)
+    let $log := xdmp:log("Tearing down...")   
+    let $config := admin:get-configuration()
+    let $log := xdmp:log("1. Detaching test forests")
+    let $config := local:detach-forest($config, $TEST_DB, $TEST_FOREST) 
     let $config := local:detach-forest($config, $TEST_DB_MODULES, $TEST_FOREST_MODULES) 
+    let $log := xdmp:log("2. Saving configuration")
     let $config := (admin:save-configuration($config), $config)
-    let $config := local:delete-forests($config, ($TEST_FOREST, $TEST_FOREST_MODULES)) 
-    let $config := local:delete-databases($config, ($TEST_DB, $TEST_DB_MODULES)) 
+    let $log := xdmp:log("3. Deleting Forests")
+    let $config := local:delete-forest($config, $TEST_FOREST)
+    let $config := local:delete-forest($config, $TEST_FOREST_MODULES) 
+    let $log := xdmp:log("4. Deleting Databases")
+    let $config := local:delete-database($config, $TEST_DB)
+    let $config := local:delete-database($config, $TEST_DB_MODULES) 
+    let $log := xdmp:log("5. Saving configuration")
     let $config := (admin:save-configuration($config), $config)
+    let $log := xdmp:log("6. Teardown complete")
     return $config 
+};
+
+(:::
+ :
+ :
+ :
+ :          C R E A T E  T E S T  D A T A 
+ :
+ :
+ :)
+
+declare function local:random-hex($length as xs:integer) as xs:string { string-join( for $n in
+    1 to $length return xdmp:integer-to-hex(xdmp:random(15)), "" ) };
+
+declare function local:generate-uuid-v4() as xs:string {
+    string-join(
+        (
+            local:random-hex(8),
+            local:random-hex(4),    
+            local:random-hex(4),
+            local:random-hex(4),
+            local:random-hex(12)
+        ),
+        "-"
+    )
+};
+
+
+
+declare function local:create-test-documents($num-docs as xs:integer){
+    for $i in (1 to $num-docs) 
+        let $id := local:generate-uuid-v4()
+        return (
+        xdmp:document-insert(
+            fn:concat("/test/", $id, ".xml"), 
+            element data {
+                element id {$id},
+                element date {fn:current-dateTime()}
+            },
+            xdmp:default-permissions(), 
+            xdmp:default-collections(), 
+            10, 
+            (xdmp:forest($TEST_FOREST))
+        )
+    )     
 };
 
 (: step one - create databases and forests and add lexicons :)
 (:local:setup-test-resources():)
 
 (: step two - insert a bunch of random docs into the new db for testing :)
-
+local:create-test-documents(2000)
 (: step three - create an application server and modules db for testing :)
 
 
 (: step four - remove databases and forests :)
-(:local:teardown-test-resources() :)
+(:local:teardown-test-resources():)
