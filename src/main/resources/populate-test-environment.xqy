@@ -1,6 +1,6 @@
 xquery version "1.0-ml";
 
-declare variable $TEST_FOREST as xs:string := "unit-test-forest01";
+declare variable $TEST_FOREST as xs:string external;
 
 
 (:

@@ -17,6 +17,14 @@ public class TestHelper {
 
 	// public static final String CORB_MODULE_FOLDER = "\\main\\resources\\";
 
+	/**
+	 * Values below are bound to the setup / teardown CORB Unit tests
+	 */
+	private static final String TEST_DB = "unit-test-db";
+	private static final String TEST_DB_MODULES = "unit-test-modules";
+	private static final String TEST_FOREST = "unit-test-forest01";
+	private static final String TEST_FOREST_MODULES = "unit-test-modules-forest01";
+
 	private static final String REMOVE_MODULES_AFTER = "false";
 	private static final String INSTALL_MODULES_ON_SERVER = "true";
 	private static final String DO_NOT_INSTALL_MODULES_ON_SERVER = "false";

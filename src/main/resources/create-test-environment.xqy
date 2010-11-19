@@ -7,10 +7,10 @@ import module namespace admin = "http://marklogic.com/xdmp/admin"
  : GLOBAL VARIABLES
  :)
  
-declare variable $TEST_DB as xs:string := "unit-test-db";
-declare variable $TEST_DB_MODULES as xs:string := "unit-test-modules";
-declare variable $TEST_FOREST as xs:string := "unit-test-forest01";
-declare variable $TEST_FOREST_MODULES as xs:string := "unit-test-modules-forest01";
+declare variable $TEST_DB as xs:string external;
+declare variable $TEST_DB_MODULES as xs:string external;
+declare variable $TEST_FOREST as xs:string external;
+declare variable $TEST_FOREST_MODULES as xs:string external;
 
 
 declare function local:create-forest(
