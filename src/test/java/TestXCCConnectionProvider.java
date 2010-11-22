@@ -14,7 +14,7 @@ public class TestXCCConnectionProvider {
 		XCCConnectionProvider xcccp = new XCCConnectionProvider(
 				TestHelper.getConnectionUri());
 		ContentSource cs = xcccp.getContentSource();
-		xcccp.buildConnection(cs, TestHelper.UNIT_TEST_TEARDOWN);
+		xcccp.buildConnection(cs, TestHelper.UNIT_TEST_TEARDOWN, true);
 
 		/*
 		 * String mod = ""; try { mod =

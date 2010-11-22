@@ -36,14 +36,14 @@ public class TestManager {
 		logger.info("Creating Databases and Forests for tests");
 		xcccp = new XCCConnectionProvider(TestHelper.getConnectionUri());
 		xcccp.buildConnection(xcccp.getContentSource(),
-				TestHelper.UNIT_TEST_SETUP);
+				TestHelper.UNIT_TEST_SETUP, false);
 
 		logger.info("Populating test Database");
 		// Now we have the DBs set up, change to:
 		xcccp = new XCCConnectionProvider(
 				TestHelper.getCorbUnitTestConnectionUri());
 		xcccp.buildConnection(xcccp.getContentSource(),
-				TestHelper.UNIT_TEST_POPULATE_DB);
+				TestHelper.UNIT_TEST_POPULATE_DB, false);
 	}
 
 	/**
@@ -68,7 +68,19 @@ public class TestManager {
 	public static void tearDown() {
 		logger.info("Tearing down unit test");
 		xcccp.buildConnection(xcccp.getContentSource(),
-				TestHelper.UNIT_TEST_TEARDOWN);
+				TestHelper.UNIT_TEST_TEARDOWN, true);
+		logger.info("Sleeping for one minute while MarkLogic restarts...");
+		try {
+			Thread.sleep(20000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		logger.info("Completing Teardown");
+
+		xcccp = new XCCConnectionProvider(TestHelper.getConnectionUri());
+		xcccp.buildConnection(xcccp.getContentSource(),
+				TestHelper.UNIT_TEST_TEARDOWN, false);
 	}
 
 	private void invokeCorbWithArguments(String[] arguments) {

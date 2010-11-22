@@ -93,7 +93,6 @@ declare function local:create-databases(
             return local:create-database($config, $NewDatabase)  
 };
 
-
 (:~
  : The function that does all the work...
  : TODO = attach forest doesn't work properly if a forest is already attached..
@@ -118,7 +117,10 @@ declare function local:setup-test-resources(){
     let $config := admin:database-attach-forest($config, xdmp:database($TEST_DB), xdmp:forest($TEST_FOREST) )
     let $log := xdmp:log("6. Attaching Test DB MODULE forests...")
     let $config := admin:database-attach-forest($config, xdmp:database($TEST_DB_MODULES), xdmp:forest($TEST_FOREST_MODULES) )
-    let $log := xdmp:log("7. Saving configuration")
+    let $log := xdmp:log("7. Creating XDBC Application Server")
+    let $config := admin:xdbc-server-create($config, admin:group-get-id($config, "Default"), "xdbc-9997-corbtest", 
+        "/", 9997, xdmp:database($TEST_DB_MODULES), xdmp:database($TEST_DB) )
+    let $log := xdmp:log("8. Saving configuration")
     let $config := (admin:save-configuration($config), $config)
     let $log := xdmp:log("Setup Complete")
     return $config

@@ -20,7 +20,10 @@ public class TestHelper {
 	/**
 	 * Values below are bound to the setup / teardown CORB Unit tests
 	 */
-	private static final String CONNECTION_URI = "xcc://admin:admin@localhost:8010";
+	private static final String BASE_CONNECTION_URI = "xcc://admin:admin@localhost";
+
+	private static final String INITIAL_CONNECTION_PORT = "8010";
+	private static final String TEST_APPSERVER_PORT = "9997";
 
 	private static final String TEST_DB = "unit-test-db";
 	private static final String TEST_DB_MODULES = "unit-test-modules";
@@ -69,18 +72,27 @@ public class TestHelper {
 	}
 
 	public static String getConnectionUri() {
-		return getConnectionUri(CONNECTION_URI);
+		return getConnectionUri(BASE_CONNECTION_URI + ":"
+				+ INITIAL_CONNECTION_PORT);
 	}
 
 	public static String getCorbUnitTestConnectionUri() {
-		return getConnectionUri(CONNECTION_URI + "/" + TEST_DB);
+		return getConnectionUri(BASE_CONNECTION_URI + ":" + TEST_APPSERVER_PORT
+				+ "/" + TEST_DB);
 	}
 
-	public static Request setTestConfigurationVariables(Request request) {
+	public static Request setTestConfigurationVariables(Request request,
+			Boolean startTeardown) {
 		request.setNewStringVariable("TEST_DB", TEST_DB);
 		request.setNewStringVariable("TEST_DB_MODULES", TEST_DB_MODULES);
 		request.setNewStringVariable("TEST_FOREST", TEST_FOREST);
 		request.setNewStringVariable("TEST_FOREST_MODULES", TEST_FOREST_MODULES);
+		// You can't bind a boolean - using xs:integer instead
+		if (startTeardown) {
+			request.setNewIntegerVariable("BEGIN_TEARDOWN", 1);
+		} else {
+			request.setNewIntegerVariable("BEGIN_TEARDOWN", 0);
+		}
 		return request;
 	}
 

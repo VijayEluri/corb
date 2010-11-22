@@ -23,11 +23,8 @@ public class XCCConnectionProvider {
 	private final SimpleLogger logger;
 	private ContentSource contentSource;
 
-	// TODO - constructor / singleton
-
 	public XCCConnectionProvider(String uriString) {
 		logger = SimpleLogger.getSimpleLogger();
-		// logger.info("XCCConnectionProvider :: INIT - todo - fix so this is a singleton on demand");
 		try {
 			uri = new URI(uriString);
 		} catch (URISyntaxException e) {
@@ -46,14 +43,16 @@ public class XCCConnectionProvider {
 		return contentSource;
 	}
 
-	public void buildConnection(ContentSource cs, String queryFilePath) {
+	public void buildConnection(ContentSource cs, String queryFilePath,
+			Boolean startTeardown) {
 		try {
 			logger.fine("Creating a new Session");
 			Session session = getContentSource().newSession();
 			logger.fine("Creating an AdHoc Query");
 			Request request = session.newAdhocQuery(readFile(queryFilePath));
 			logger.fine("Configuring external Variable bindings");
-			request = TestHelper.setTestConfigurationVariables(request);
+			request = TestHelper.setTestConfigurationVariables(request,
+					startTeardown);
 			logger.fine("Submitting request..");
 			ResultSequence rs = session.submitRequest(request);
 			logger.fine(rs.asString());

@@ -20,6 +20,7 @@ declare variable $TEST_DB as xs:string external;
 declare variable $TEST_DB_MODULES as xs:string external;
 declare variable $TEST_FOREST as xs:string external;
 declare variable $TEST_FOREST_MODULES as xs:string external;
+declare variable $BEGIN_TEARDOWN as xs:integer external;
 
 (:
  : Functions
@@ -125,15 +126,25 @@ declare function local:teardown-test-resources(){
     let $config := (admin:save-configuration($config), $config)
     let $log := xdmp:log("3. Deleting Forests")
     let $config := local:delete-forest($config, $TEST_FOREST)
-    let $config := local:delete-forest($config, $TEST_FOREST_MODULES) 
-    let $log := xdmp:log("4. Deleting Databases")
+    let $config := local:delete-forest($config, $TEST_FOREST_MODULES)
+    let $log := xdmp:log("4. Removing XDBC Server")
+    let $config := admin:appserver-delete($config,
+        admin:appserver-get-id($config, admin:group-get-id($config, "Default"), "xdbc-9997-corbtest") )
+    let $log := xdmp:log("5. Saving configuration (and restarting MarkLogic)")
+    return admin:save-configuration($config)
+};
+
+declare function local:teardown-databases(){
+    let $log := xdmp:log("6. Deleting Databases")
+    let $config := admin:get-configuration()
     let $config := local:delete-database($config, $TEST_DB)
     let $config := local:delete-database($config, $TEST_DB_MODULES) 
-    let $log := xdmp:log("5. Saving configuration")
+    let $log := xdmp:log("7. Saving configuration")
     let $config := (admin:save-configuration($config), $config)
-    let $log := xdmp:log("6. Teardown complete")
+    let $log := xdmp:log("Teardown complete")
     return $config 
 };
 
-(: step four - remove databases and forests :)
-local:teardown-test-resources()
+if ($BEGIN_TEARDOWN eq 1) 
+then local:teardown-test-resources()
+else local:teardown-databases()
