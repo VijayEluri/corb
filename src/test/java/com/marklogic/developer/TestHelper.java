@@ -17,12 +17,11 @@ public class TestHelper {
 	 * static final String TMP = System.getProperty("java.io.tmpdir");
 	 */
 
-	// public static final String CORB_MODULE_FOLDER = "\\main\\resources\\";
-
 	/**
 	 * Values below are bound to the setup / teardown CORB Unit tests
 	 */
 	private static final String CONNECTION_URI = "xcc://admin:admin@localhost:8010";
+
 	private static final String TEST_DB = "unit-test-db";
 	private static final String TEST_DB_MODULES = "unit-test-modules";
 	private static final String TEST_FOREST = "unit-test-forest01";
@@ -36,8 +35,13 @@ public class TestHelper {
 	private static final String MODULE_ROOT = "/";
 	private static final String DEFAULT_COLLECTION = "";
 
-	public static final String UNIT_TEST_SETUP = "src/main/resources/create-test-environment.xqy";
-	public static final String UNIT_TEST_TEARDOWN = "src/main/resources/teardown-test-environment.xqy";
+	public static final String UNIT_TEST_MODULE_ROOT = "src/main/resources/";
+	public static final String UNIT_TEST_SETUP = UNIT_TEST_MODULE_ROOT
+			+ "create-test-environment.xqy";
+	public static final String UNIT_TEST_TEARDOWN = UNIT_TEST_MODULE_ROOT
+			+ "teardown-test-environment.xqy";
+	public static final String UNIT_TEST_POPULATE_DB = UNIT_TEST_MODULE_ROOT
+			+ "populate-test-environment.xqy";
 
 	public static final String BASIC_TRANSFORM_MODULE = "basic-transform-module.xqy";
 	public static final String BASIC_URI_SELECTION_MODULE = "basic-uri-selection.xqy";
@@ -53,15 +57,23 @@ public class TestHelper {
 	 * 
 	 * @return
 	 */
-	public static String getConnectionUri() {
+	private static String getConnectionUri(String uri) {
 		URI connectionUri = null;
 		try {
 			// TODO - Refactor these values out to a config file?
-			connectionUri = new URI(CONNECTION_URI);
+			connectionUri = new URI(uri);
 		} catch (URISyntaxException e) {
 			SimpleLogger.getSimpleLogger().severe(e.toString());
 		}
 		return connectionUri.toString();
+	}
+
+	public static String getConnectionUri() {
+		return getConnectionUri(CONNECTION_URI);
+	}
+
+	public static String getCorbUnitTestConnectionUri() {
+		return getConnectionUri(CONNECTION_URI + "/" + TEST_DB);
 	}
 
 	public static Request setTestConfigurationVariables(Request request) {
@@ -85,7 +97,7 @@ public class TestHelper {
 	public static String[] getFirstSampleInvocation() {
 		List<String> args = new ArrayList<String>();
 		// URI
-		args.add(getConnectionUri());
+		args.add(getCorbUnitTestConnectionUri());
 		// Collection
 		args.add(DEFAULT_COLLECTION);
 		// XQ Transform Module
@@ -107,7 +119,7 @@ public class TestHelper {
 	public static String[] getSecondSampleInvocation() {
 		List<String> args = new ArrayList<String>();
 		// URI
-		args.add(getConnectionUri());
+		args.add(getCorbUnitTestConnectionUri());
 		// Collection
 		args.add(DEFAULT_COLLECTION);
 		// XQ Transform Module
@@ -134,7 +146,7 @@ public class TestHelper {
 	public static String[] getThirdSampleInvocation() {
 		List<String> args = new ArrayList<String>();
 		// URI
-		args.add(getConnectionUri());
+		args.add(getCorbUnitTestConnectionUri());
 		// Collection
 		args.add(DEFAULT_COLLECTION);
 		// XQ Transform Module
@@ -188,17 +200,3 @@ public class TestHelper {
 	}
 
 }
-
-// Module root
-// args.add("/");
-// args.add("Modules");
-
-// args.add(INSTALL_MODULES_ON_SERVER);
-/*
- * WE SHOULDN"T NEED TO CARE ABOUT THIS // Module root args.add(MODULE_ROOT); //
- * Modules DB args.add(NO_MODULES_DB); // # MODULES-DATABASE (uses the
- * XCC-CONNECTION-URI if not provided; use // 0 for filesystem)
- * args.add(INSTALL_MODULES_ON_SERVER);
- * 
- * // # INSTALL (default is true; set to 'false' or '0' to skip // installation)
- */

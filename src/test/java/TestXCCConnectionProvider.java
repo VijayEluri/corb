@@ -2,6 +2,13 @@ import com.marklogic.developer.TestHelper;
 import com.marklogic.developer.XCCConnectionProvider;
 import com.marklogic.xcc.ContentSource;
 
+/**
+ * TODO - write proper tests or mark for deprecation
+ * 
+ * @author ableasdale
+ * 
+ */
+
 public class TestXCCConnectionProvider {
 	public static void main(String[] args) {
 		XCCConnectionProvider xcccp = new XCCConnectionProvider(

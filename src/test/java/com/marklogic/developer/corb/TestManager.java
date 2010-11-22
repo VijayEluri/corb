@@ -33,9 +33,17 @@ public class TestManager {
 	public static void setup() {
 		logger = SimpleLogger.getSimpleLogger();
 		logger.info("Setting up unit test");
+		logger.info("Creating Databases and Forests for tests");
 		xcccp = new XCCConnectionProvider(TestHelper.getConnectionUri());
 		xcccp.buildConnection(xcccp.getContentSource(),
 				TestHelper.UNIT_TEST_SETUP);
+
+		logger.info("Populating test Database");
+		// Now we have the DBs set up, change to:
+		xcccp = new XCCConnectionProvider(
+				TestHelper.getCorbUnitTestConnectionUri());
+		xcccp.buildConnection(xcccp.getContentSource(),
+				TestHelper.UNIT_TEST_POPULATE_DB);
 	}
 
 	/**
