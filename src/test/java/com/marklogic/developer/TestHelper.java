@@ -5,6 +5,8 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.marklogic.xcc.Request;
+
 public class TestHelper {
 
 	/**
@@ -20,6 +22,7 @@ public class TestHelper {
 	/**
 	 * Values below are bound to the setup / teardown CORB Unit tests
 	 */
+	private static final String CONNECTION_URI = "xcc://admin:admin@localhost:8010";
 	private static final String TEST_DB = "unit-test-db";
 	private static final String TEST_DB_MODULES = "unit-test-modules";
 	private static final String TEST_FOREST = "unit-test-forest01";
@@ -32,6 +35,9 @@ public class TestHelper {
 	private static final String MODULES_DB = "Modules";
 	private static final String MODULE_ROOT = "/";
 	private static final String DEFAULT_COLLECTION = "";
+
+	public static final String UNIT_TEST_SETUP = "src/main/resources/create-test-environment.xqy";
+	public static final String UNIT_TEST_TEARDOWN = "src/main/resources/teardown-test-environment.xqy";
 
 	public static final String BASIC_TRANSFORM_MODULE = "basic-transform-module.xqy";
 	public static final String BASIC_URI_SELECTION_MODULE = "basic-uri-selection.xqy";
@@ -51,11 +57,19 @@ public class TestHelper {
 		URI connectionUri = null;
 		try {
 			// TODO - Refactor these values out to a config file?
-			connectionUri = new URI("xcc://admin:admin@localhost:8003");
+			connectionUri = new URI(CONNECTION_URI);
 		} catch (URISyntaxException e) {
 			SimpleLogger.getSimpleLogger().severe(e.toString());
 		}
 		return connectionUri.toString();
+	}
+
+	public static Request setTestConfigurationVariables(Request request) {
+		request.setNewStringVariable("TEST_DB", TEST_DB);
+		request.setNewStringVariable("TEST_DB_MODULES", TEST_DB_MODULES);
+		request.setNewStringVariable("TEST_FOREST", TEST_FOREST);
+		request.setNewStringVariable("TEST_FOREST_MODULES", TEST_FOREST_MODULES);
+		return request;
 	}
 
 	/**
@@ -172,6 +186,7 @@ public class TestHelper {
 		args.add(REMOVE_MODULES_AFTER);
 		return (args.toArray(new String[args.size()]));
 	}
+
 }
 
 // Module root

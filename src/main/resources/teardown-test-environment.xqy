@@ -1,5 +1,14 @@
 xquery version "1.0-ml";
 
+(:~
+ :
+ :
+ :              TEARDOWN UNIT TEST MODULE CODE BELOW:
+ :
+ :
+ :
+ :)
+
 import module namespace admin = "http://marklogic.com/xdmp/admin" 
           at "/MarkLogic/admin.xqy";
 
@@ -13,14 +22,8 @@ declare variable $TEST_FOREST as xs:string external;
 declare variable $TEST_FOREST_MODULES as xs:string external;
 
 (:
- :
- :
- :              TEARDOWN UNIT TEST MODULE CODE BELOW:
- :
- :
- :
+ : Functions
  :)
-
 declare function local:delete-forest(
     $config as element(configuration), 
     $ForestName as xs:string) as element(configuration)

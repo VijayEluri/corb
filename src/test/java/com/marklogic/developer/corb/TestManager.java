@@ -4,12 +4,13 @@ import java.net.URISyntaxException;
 import java.text.MessageFormat;
 import java.util.Date;
 
-import org.junit.After;
-import org.junit.Before;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.marklogic.developer.SimpleLogger;
 import com.marklogic.developer.TestHelper;
+import com.marklogic.developer.XCCConnectionProvider;
 
 /**
  * com.marklogic.developer.corb.Manager xcc://user:password@host:port/[ database
@@ -23,15 +24,18 @@ public class TestManager {
 
 	// String home;
 	// String corbModuleFolder;
-	SimpleLogger logger;
+	static SimpleLogger logger;
+	static XCCConnectionProvider xcccp;
 
 	// URI connectionUri = null;
 
-	@Before
-	public void setup() {
+	@BeforeClass
+	public static void setup() {
 		logger = SimpleLogger.getSimpleLogger();
 		logger.info("Setting up unit test");
-		// All Setup moved to TestHelper for now
+		xcccp = new XCCConnectionProvider(TestHelper.getConnectionUri());
+		xcccp.buildConnection(xcccp.getContentSource(),
+				TestHelper.UNIT_TEST_SETUP);
 	}
 
 	/**
@@ -52,9 +56,11 @@ public class TestManager {
 		invokeCorbWithArguments(TestHelper.getThirdSampleInvocation());
 	}
 
-	@After
-	public void tearDown() {
+	@AfterClass
+	public static void tearDown() {
 		logger.info("Tearing down unit test");
+		xcccp.buildConnection(xcccp.getContentSource(),
+				TestHelper.UNIT_TEST_TEARDOWN);
 	}
 
 	private void invokeCorbWithArguments(String[] arguments) {
