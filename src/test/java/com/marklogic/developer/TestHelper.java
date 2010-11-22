@@ -34,7 +34,7 @@ public class TestHelper {
 	private static final String INSTALL_MODULES_ON_SERVER = "true";
 	private static final String DO_NOT_INSTALL_MODULES_ON_SERVER = "false";
 
-	private static final String MODULES_DB = "Modules";
+	// private static final String MODULES_DB = "Modules";
 	private static final String MODULE_ROOT = "/";
 	private static final String DEFAULT_COLLECTION = "";
 
@@ -51,7 +51,8 @@ public class TestHelper {
 
 	public static final String DEFAULT_THREADS = "5";
 	private static final String NO_MODULES_DB_USING_FS_INSTEAD = "0";
-	private static final String ALT_MODULES_DB = "mydb";
+
+	// private static final String ALT_MODULES_DB = "mydb";
 
 	/**
 	 * A bit overkill for CORBs purposes as all it really needs is the string as
@@ -77,8 +78,8 @@ public class TestHelper {
 	}
 
 	public static String getCorbUnitTestConnectionUri() {
-		return getConnectionUri(BASE_CONNECTION_URI + ":" + TEST_APPSERVER_PORT
-				+ "/" + TEST_DB);
+		return getConnectionUri(BASE_CONNECTION_URI + ":" + TEST_APPSERVER_PORT);
+		// + "/" + TEST_DB);
 	}
 
 	public static Request setTestConfigurationVariables(Request request,
@@ -170,7 +171,7 @@ public class TestHelper {
 		// Module root
 		args.add(MODULE_ROOT);
 		// Modules DB
-		args.add(ALT_MODULES_DB);
+		args.add(TEST_DB_MODULES);
 		// Install
 		args.add(DO_NOT_INSTALL_MODULES_ON_SERVER);
 		return (args.toArray(new String[args.size()]));
@@ -191,7 +192,7 @@ public class TestHelper {
 		 * uris-module [ module-root [ modules-database [ install ] ] ] ] ]
 		 */
 		// URI
-		args.add(getConnectionUri());
+		args.add(getCorbUnitTestConnectionUri());
 		// Collection
 		args.add(DEFAULT_COLLECTION);
 		// XQ Transform Module
@@ -203,7 +204,7 @@ public class TestHelper {
 		// Module root
 		args.add(MODULE_ROOT);
 		// Modules DB
-		args.add(MODULES_DB);
+		args.add(TEST_DB_MODULES);
 		// Install
 		args.add(INSTALL_MODULES_ON_SERVER);
 		// Remove modules after

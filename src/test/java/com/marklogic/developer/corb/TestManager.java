@@ -64,21 +64,26 @@ public class TestManager {
 		invokeCorbWithArguments(TestHelper.getThirdSampleInvocation());
 	}
 
+	@Test
+	public void testWithAllArgs() {
+		invokeCorbWithArguments(TestHelper.getFullCorbArgs());
+	}
+
 	@AfterClass
 	public static void tearDown() {
 		logger.info("Tearing down unit test");
+		xcccp = new XCCConnectionProvider(TestHelper.getConnectionUri());
 		xcccp.buildConnection(xcccp.getContentSource(),
 				TestHelper.UNIT_TEST_TEARDOWN, true);
-		logger.info("Sleeping for one minute while MarkLogic restarts...");
+		logger.info("Sleeping momentarily while MarkLogic restarts...");
 		try {
-			Thread.sleep(20000);
+			Thread.sleep(10000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		logger.info("Completing Teardown");
 
-		xcccp = new XCCConnectionProvider(TestHelper.getConnectionUri());
 		xcccp.buildConnection(xcccp.getContentSource(),
 				TestHelper.UNIT_TEST_TEARDOWN, false);
 	}

@@ -15,7 +15,13 @@ public class TestXCCConnectionProvider {
 				TestHelper.getConnectionUri());
 		ContentSource cs = xcccp.getContentSource();
 		xcccp.buildConnection(cs, TestHelper.UNIT_TEST_TEARDOWN, true);
-
+		try {
+			Thread.sleep(10000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		xcccp.buildConnection(cs, TestHelper.UNIT_TEST_TEARDOWN, false);
 		/*
 		 * String mod = ""; try { mod =
 		 * xcccp.readFile(TestHelper.UNIT_TEST_TEARDOWN); } catch (IOException
