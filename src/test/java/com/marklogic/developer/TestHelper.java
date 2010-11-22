@@ -21,7 +21,6 @@ public class TestHelper {
 	 * Values below are bound to the setup / teardown CORB Unit tests
 	 */
 	private static final String BASE_CONNECTION_URI = "xcc://admin:admin@localhost";
-
 	private static final String INITIAL_CONNECTION_PORT = "8010";
 	private static final String TEST_APPSERVER_PORT = "9997";
 
@@ -34,7 +33,6 @@ public class TestHelper {
 	private static final String INSTALL_MODULES_ON_SERVER = "true";
 	private static final String DO_NOT_INSTALL_MODULES_ON_SERVER = "false";
 
-	// private static final String MODULES_DB = "Modules";
 	private static final String MODULE_ROOT = "/";
 	private static final String DEFAULT_COLLECTION = "";
 
@@ -49,10 +47,8 @@ public class TestHelper {
 	public static final String BASIC_TRANSFORM_MODULE = "basic-transform-module.xqy";
 	public static final String BASIC_URI_SELECTION_MODULE = "basic-uri-selection.xqy";
 
-	public static final String DEFAULT_THREADS = "5";
+	public static final String DEFAULT_THREADS = "16";
 	private static final String NO_MODULES_DB_USING_FS_INSTEAD = "0";
-
-	// private static final String ALT_MODULES_DB = "mydb";
 
 	/**
 	 * A bit overkill for CORBs purposes as all it really needs is the string as
@@ -141,6 +137,27 @@ public class TestHelper {
 		args.add(DEFAULT_THREADS);
 		// URI Selection module
 		args.add(BASIC_URI_SELECTION_MODULE);
+		return (args.toArray(new String[args.size()]));
+	}
+
+	public static String[] getSecondSampleInvocationWithFlagToCopyModules() {
+		List<String> args = new ArrayList<String>();
+		// URI
+		args.add(getCorbUnitTestConnectionUri());
+		// Collection
+		args.add(DEFAULT_COLLECTION);
+		// XQ Transform Module
+		args.add(BASIC_TRANSFORM_MODULE);
+		// Threads
+		args.add(DEFAULT_THREADS);
+		// URI Selection module
+		args.add(BASIC_URI_SELECTION_MODULE);
+		// Module root
+		args.add(MODULE_ROOT);
+		// Modules DB
+		args.add(TEST_DB_MODULES);
+		// Install
+		args.add(INSTALL_MODULES_ON_SERVER);
 		return (args.toArray(new String[args.size()]));
 	}
 

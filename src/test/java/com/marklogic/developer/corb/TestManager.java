@@ -75,6 +75,12 @@ public class TestManager {
 	 */
 
 	@Test
+	public void testSecondSampleInvocation() {
+		invokeCorbWithArguments(TestHelper
+				.getSecondSampleInvocationWithFlagToCopyModules());
+	}
+
+	@Test
 	public void testThirdSampleInvocation() {
 		invokeCorbWithArguments(TestHelper
 				.getThirdSampleInvocationWithFlagToCopyModules());
