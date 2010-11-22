@@ -177,6 +177,27 @@ public class TestHelper {
 		return (args.toArray(new String[args.size()]));
 	}
 
+	public static String[] getThirdSampleInvocationWithFlagToCopyModules() {
+		List<String> args = new ArrayList<String>();
+		// URI
+		args.add(getCorbUnitTestConnectionUri());
+		// Collection
+		args.add(DEFAULT_COLLECTION);
+		// XQ Transform Module
+		args.add(BASIC_TRANSFORM_MODULE);
+		// Threads
+		args.add(DEFAULT_THREADS);
+		// URI Selection module
+		args.add(BASIC_URI_SELECTION_MODULE);
+		// Module root
+		args.add(MODULE_ROOT);
+		// Modules DB
+		args.add(TEST_DB_MODULES);
+		// Install
+		args.add(INSTALL_MODULES_ON_SERVER);
+		return (args.toArray(new String[args.size()]));
+	}
+
 	/**
 	 * Wrapper / Helper class for getting sets of CORB argument parameters used
 	 * mainly to aid testing

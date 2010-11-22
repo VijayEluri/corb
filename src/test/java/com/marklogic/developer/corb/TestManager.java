@@ -46,22 +46,38 @@ public class TestManager {
 				TestHelper.UNIT_TEST_POPULATE_DB, false);
 	}
 
+	/*
+	 * The following three tests (below) should all throw a RuntimeException as
+	 * the Modules can't be located. This is correct behaviour for the
+	 * configuration arguments passed in
+	 */
+
 	/**
 	 * Unit test to prove the medline-iso8601.xqy arguments work
 	 */
-	@Test
-	public void testFirstSampleInvocation() {
+	@Test(expected = RuntimeException.class)
+	public void testFirstSampleInvocationWithoutFirstCopyingTheModules() {
 		invokeCorbWithArguments(TestHelper.getFirstSampleInvocation());
 	}
 
-	@Test
-	public void testSecondSampleInvocation() {
+	@Test(expected = RuntimeException.class)
+	public void testSecondSampleInvocationWithoutFirstCopyingTheModules() {
 		invokeCorbWithArguments(TestHelper.getSecondSampleInvocation());
 	}
 
+	@Test(expected = RuntimeException.class)
+	public void testThirdSampleInvocationWithoutFirstCopyingTheModules() {
+		invokeCorbWithArguments(TestHelper.getThirdSampleInvocation());
+	}
+
+	/*
+	 * The following tests have flags to first install the modules
+	 */
+
 	@Test
 	public void testThirdSampleInvocation() {
-		invokeCorbWithArguments(TestHelper.getThirdSampleInvocation());
+		invokeCorbWithArguments(TestHelper
+				.getThirdSampleInvocationWithFlagToCopyModules());
 	}
 
 	@Test
