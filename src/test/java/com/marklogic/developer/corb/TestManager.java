@@ -4,13 +4,11 @@ import java.net.URISyntaxException;
 import java.text.MessageFormat;
 import java.util.Date;
 
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.marklogic.developer.SimpleLogger;
 import com.marklogic.developer.TestHelper;
-import com.marklogic.developer.XCCConnectionProvider;
 
 /**
  * com.marklogic.developer.corb.Manager xcc://user:password@host:port/[ database
@@ -25,25 +23,12 @@ public class TestManager {
 	// String home;
 	// String corbModuleFolder;
 	static SimpleLogger logger;
-	static XCCConnectionProvider xcccp;
 
 	// URI connectionUri = null;
 
 	@BeforeClass
 	public static void setup() {
 		logger = SimpleLogger.getSimpleLogger();
-		logger.info("Setting up unit test");
-		logger.info("Creating Databases and Forests for tests");
-		xcccp = new XCCConnectionProvider(TestHelper.getConnectionUri());
-		xcccp.buildConnection(xcccp.getContentSource(),
-				TestHelper.UNIT_TEST_SETUP, false);
-
-		logger.info("Populating test Database");
-		// Now we have the DBs set up, change to:
-		xcccp = new XCCConnectionProvider(
-				TestHelper.getCorbUnitTestConnectionUri());
-		xcccp.buildConnection(xcccp.getContentSource(),
-				TestHelper.UNIT_TEST_POPULATE_DB, false);
 	}
 
 	/*
@@ -95,25 +80,6 @@ public class TestManager {
 	@Test
 	public void testWithAllArgs() {
 		invokeCorbWithArguments(TestHelper.getFullCorbArgs());
-	}
-
-	@AfterClass
-	public static void tearDown() {
-		logger.info("Tearing down unit test");
-		xcccp = new XCCConnectionProvider(TestHelper.getConnectionUri());
-		xcccp.buildConnection(xcccp.getContentSource(),
-				TestHelper.UNIT_TEST_TEARDOWN, true);
-		logger.info("Sleeping momentarily while MarkLogic restarts...");
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		logger.info("Completing Teardown");
-
-		xcccp.buildConnection(xcccp.getContentSource(),
-				TestHelper.UNIT_TEST_TEARDOWN, false);
 	}
 
 	private void invokeCorbWithArguments(String[] arguments) {
