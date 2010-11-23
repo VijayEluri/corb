@@ -16,6 +16,7 @@ resources required by the test suite.
 ================================================================================
 Alternatively you can paste the following XQuery into CQ/DQ to create the server:
 ================================================================================
+(: start of module :)
 xquery version "1.0-ml";
 
 import module namespace admin = "http://marklogic.com/xdmp/admin" 
