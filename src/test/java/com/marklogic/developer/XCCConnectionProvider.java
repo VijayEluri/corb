@@ -1,13 +1,8 @@
 package com.marklogic.developer;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.MappedByteBuffer;
-import java.nio.channels.FileChannel;
-import java.nio.charset.Charset;
 
 import com.marklogic.xcc.ContentSource;
 import com.marklogic.xcc.ContentSourceFactory;
@@ -49,7 +44,9 @@ public class XCCConnectionProvider {
 			logger.fine("Creating a new Session");
 			Session session = getContentSource().newSession();
 			logger.fine("Creating an AdHoc Query");
-			Request request = session.newAdhocQuery(readFile(queryFilePath));
+
+			Request request = session.newAdhocQuery(Utilities
+					.readFile(queryFilePath));
 			logger.fine("Configuring external Variable bindings");
 			request = TestHelper.setTestConfigurationVariables(request,
 					startTeardown);
@@ -64,24 +61,4 @@ public class XCCConnectionProvider {
 		}
 	}
 
-	/**
-	 * Takes a file path (as represented by a String) and returns a UTF-8
-	 * decoded String containing the content of the file. Useful for pulling
-	 * text content into AdHoc queries.
-	 * 
-	 * @param path
-	 * @return
-	 * @throws IOException
-	 */
-	public String readFile(String path) throws IOException {
-		FileInputStream stream = new FileInputStream(new File(path));
-		try {
-			FileChannel fc = stream.getChannel();
-			MappedByteBuffer bb = fc.map(FileChannel.MapMode.READ_ONLY, 0,
-					fc.size());
-			return Charset.forName("UTF-8").decode(bb).toString();
-		} finally {
-			stream.close();
-		}
-	}
 }
