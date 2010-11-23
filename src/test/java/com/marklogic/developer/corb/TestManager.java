@@ -105,7 +105,7 @@ public class TestManager {
 				TestHelper.UNIT_TEST_TEARDOWN, true);
 		logger.info("Sleeping momentarily while MarkLogic restarts...");
 		try {
-			Thread.sleep(10000);
+			Thread.sleep(5000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
