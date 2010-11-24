@@ -324,7 +324,7 @@ public class TestHelper {
 		args.add(TEST_DB_MODULES);
 		// Install
 		args.add(INSTALL_MODULES_ON_SERVER);
-		// Remove modules after
+		// Remove modules after (*one of the newly requested features*)
 		args.add(REMOVE_MODULES_AFTER);
 		return (args.toArray(new String[args.size()]));
 	}

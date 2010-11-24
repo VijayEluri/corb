@@ -217,10 +217,12 @@ public class Manager implements Runnable {
 	private static void usage() {
 		PrintStream err = System.err;
 		err.println("\nusage:");
-		err.println("\t" + NAME + " xcc://user:password@host:port/[ database ]"
+		err.println("\t"
+				+ NAME
+				+ " xcc://user:password@host:port/[ database ]"
 				+ " input-selector module-name.xqy"
 				+ " [ thread-count [ uris-module [ module-root"
-				+ " [ modules-database [ install ] ] ] ] ]");
+				+ " [ modules-database [ install-modules-before ] [ uninstall-modules-after ] ] ] ] ]");
 	}
 
 	/*
@@ -349,7 +351,7 @@ public class Manager implements Runnable {
      *
      */
 	private void prepareContentSource() {
-		logger.info("using content source " + connectionUri);
+		logger.info("using content source " + obfuscatePassword(connectionUri));
 		try {
 			// support SSL
 			boolean ssl = connectionUri.getScheme().equals("xccs");
@@ -366,6 +368,18 @@ public class Manager implements Runnable {
 			logger.logException(connectionUri.toString(), e);
 			throw new RuntimeException(e);
 		}
+	}
+
+	/**
+	 * This method gets called in situations where you want to log the URI but
+	 * don't want the password to appear in the log (especially as many users
+	 * run corb with admin rights).
+	 */
+	private String obfuscatePassword(URI u) {
+		int pos = u.getUserInfo().lastIndexOf(":");
+		String userInfo = u.getUserInfo().substring(0, pos) + ":XXXXX";
+		return "xcc://" + userInfo + "@" + u.getHost() + ":" + u.getPort()
+				+ u.getPath();
 	}
 
 	private void registerStatusInfo() {
