@@ -28,6 +28,7 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -70,7 +71,7 @@ import com.marklogic.xcc.types.XdmItem;
  */
 public class Manager implements Runnable {
 
-	public static String VERSION = "2010-11-08.JP";
+	public static String VERSION = "2010-11-24.J";
 
 	public class CallerBlocksPolicy implements RejectedExecutionHandler {
 
@@ -195,6 +196,10 @@ public class Manager implements Runnable {
 		if (args.length > 7 && !args[7].equals("")) {
 			if (args[7].equals("false") || args[7].equals("0"))
 				options.setDoInstall(false);
+		}
+		if (args.length > 8 && !args[8].equals("")) {
+			if (args[8].equals("true") || args[8].equals("1"))
+				options.setDoUninstall(true);
 		}
 		tm.run();
 	}
@@ -390,10 +395,14 @@ public class Manager implements Runnable {
 				options.setXDBC_ROOT(item.asString());
 			}
 		}
-		logger.info("Configured modules db: " + options.getModulesDatabase());
-		logger.info("Configured modules root: " + options.getXDBC_ROOT());
-		logger.info("Configured uri module: " + options.getUrisModule());
-		logger.info("Configured process module: " + options.getProcessModule());
+		logger.info(MessageFormat
+				.format("CORB CONFIGURATION STATUS:\nConfigured modules db: {0}\nConfigured XDBC root: {1}\nConfigured uri module: {2}\nConfigured process module: {3}\nInstall Modules First: {4}\nUninstall Modules After Processing: {5}\nConfigured modules root: {6}\nConfigured queue size: {7}\nConfigured number of Threads: {8}\n",
+						options.getModulesDatabase(), options.getXDBC_ROOT(),
+						options.getUrisModule(), options.getProcessModule(),
+						options.isDoInstall(), options.isDoUninstall(),
+						options.getModuleRoot(), options.getQueueSize(),
+						options.getThreadCount()));
+
 	}
 
 	/**

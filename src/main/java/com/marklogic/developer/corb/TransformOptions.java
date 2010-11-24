@@ -25,160 +25,176 @@ package com.marklogic.developer.corb;
  */
 public class TransformOptions {
 
-    public static final int SLEEP_TIME_MS = 500;
+	public static final int SLEEP_TIME_MS = 500;
 
-    public static final long PROGRESS_INTERVAL_MS = 60 * SLEEP_TIME_MS;
+	public static final long PROGRESS_INTERVAL_MS = 60 * SLEEP_TIME_MS;
 
-    public static final String NAME = TransformOptions.class.getName();
+	public static final String NAME = TransformOptions.class.getName();
 
-    private static final String SLASH = "/";
+	private static final String SLASH = "/";
 
-    private static final char SLASHCHAR = SLASH.toCharArray()[0];
+	private static final char SLASHCHAR = SLASH.toCharArray()[0];
 
-    public static final String COLLECTION_TYPE = "COLLECTION";
+	public static final String COLLECTION_TYPE = "COLLECTION";
 
-    public static final String DIRECTORY_TYPE = "DIRECTORY";
+	public static final String DIRECTORY_TYPE = "DIRECTORY";
 
-    public static final String QUERY_TYPE = "QUERY";
+	public static final String QUERY_TYPE = "QUERY";
 
-    private String processModule = null;
+	private String processModule = null;
 
-    // Defaults for optional arguments
-    private String moduleRoot = SLASH
-            + TransformOptions.class.getPackage().getName().replace('.',
-                    SLASHCHAR) + SLASH;
+	// Defaults for optional arguments
+	private String moduleRoot = SLASH
+			+ TransformOptions.class.getPackage().getName()
+					.replace('.', SLASHCHAR) + SLASH;
 
-    private String urisModule = "get-uris.xqy";
+	private String urisModule = "get-uris.xqy";
 
-    private int threadCount = 1;
+	private int threadCount = 1;
 
-    private boolean doInstall = true;
+	private boolean doInstall = true;
 
-    // We could get rid of this now that we check status...
-    private String modulesDatabase = "Modules";
+	private boolean doUninstall = false;
 
-    // Set on status check
-    private String XDBC_ROOT = SLASH;
+	// We could get rid of this now that we check status...
+	private String modulesDatabase = "Modules";
 
-    /**
-     * @return
-     */
-    public String getXDBC_ROOT() {
-        return XDBC_ROOT;
-    }
+	// Set on status check
+	private String XDBC_ROOT = SLASH;
 
-    /**
-     * @param xdbc_root
-     */
-    public void setXDBC_ROOT(String xdbc_root) {
-        XDBC_ROOT = xdbc_root;
-    }
+	/**
+	 * @return
+	 */
+	public String getXDBC_ROOT() {
+		return XDBC_ROOT;
+	}
 
-    /**
-     * @return
-     */
-    public int getThreadCount() {
-        return threadCount;
-    }
+	/**
+	 * @param xdbc_root
+	 */
+	public void setXDBC_ROOT(String xdbc_root) {
+		XDBC_ROOT = xdbc_root;
+	}
 
-    /**
-     * @param count
-     */
-    public void setThreadCount(int count) {
-        this.threadCount = count;
-    }
+	/**
+	 * @return
+	 */
+	public int getThreadCount() {
+		return threadCount;
+	}
 
-    /**
-     * @return
-     */
-    public String getLogLevel() {
-        // TODO LogLevel make configurable
-        return "INFO";
-    }
+	/**
+	 * @param count
+	 */
+	public void setThreadCount(int count) {
+		this.threadCount = count;
+	}
 
-    /**
-     * @return
-     */
-    public String getLogHandler() {
-        // TODO LogHandler make configurable
-        return "CONSOLE";
-    }
+	/**
+	 * @return
+	 */
+	public String getLogLevel() {
+		// TODO LogLevel make configurable
+		return "INFO";
+	}
 
-    /**
-     * @return
-     */
-    public String getModulesDatabase() {
-        return this.modulesDatabase;
-    }
+	/**
+	 * @return
+	 */
+	public String getLogHandler() {
+		// TODO LogHandler make configurable
+		return "CONSOLE";
+	}
 
-    /**
-     * @param modulesDatabase
-     */
-    public void setModulesDatabase(String modulesDatabase) {
-        this.modulesDatabase = modulesDatabase;
-    }
+	/**
+	 * @return
+	 */
+	public String getModulesDatabase() {
+		return this.modulesDatabase;
+	}
 
-    /**
-     * @return
-     */
-    public String getUrisModule() {
-        return urisModule;
-    }
+	/**
+	 * @param modulesDatabase
+	 */
+	public void setModulesDatabase(String modulesDatabase) {
+		this.modulesDatabase = modulesDatabase;
+	}
 
-    /**
-     * @param urisModule
-     */
-    public void setUrisModule(String urisModule) {
-        this.urisModule = urisModule;
-    }
+	/**
+	 * @return
+	 */
+	public String getUrisModule() {
+		return urisModule;
+	}
 
-    /**
-     * @return
-     */
-    public String getProcessModule() {
-        return processModule;
-    }
+	/**
+	 * @param urisModule
+	 */
+	public void setUrisModule(String urisModule) {
+		this.urisModule = urisModule;
+	}
 
-    /**
-     * @param processModule
-     */
-    public void setProcessModule(String processModule) {
-        this.processModule = processModule;
-    }
+	/**
+	 * @return
+	 */
+	public String getProcessModule() {
+		return processModule;
+	}
 
-    /**
-     * @return
-     */
-    public String getModuleRoot() {
-        return moduleRoot;
-    }
+	/**
+	 * @param processModule
+	 */
+	public void setProcessModule(String processModule) {
+		this.processModule = processModule;
+	}
 
-    /**
-     * @param moduleRoot
-     */
-    public void setModuleRoot(String moduleRoot) {
-        this.moduleRoot = moduleRoot;
-    }
+	/**
+	 * @return
+	 */
+	public String getModuleRoot() {
+		return moduleRoot;
+	}
 
-    /**
-     * @return
-     */
-    public boolean isDoInstall() {
-        return doInstall;
-    }
+	/**
+	 * @param moduleRoot
+	 */
+	public void setModuleRoot(String moduleRoot) {
+		this.moduleRoot = moduleRoot;
+	}
 
-    /**
-     * @param doInstall
-     */
-    public void setDoInstall(boolean doInstall) {
-        this.doInstall = doInstall;
-    }
+	/**
+	 * @return
+	 */
+	public boolean isDoInstall() {
+		return doInstall;
+	}
 
-    /**
-     * @return
-     */
-    public int getQueueSize() {
-        return 100 * 1000;
-    }
+	/**
+	 * @param doInstall
+	 */
+	public void setDoInstall(boolean doInstall) {
+		this.doInstall = doInstall;
+	}
+
+	/**
+	 * @return
+	 */
+	public boolean isDoUninstall() {
+		return doUninstall;
+	}
+
+	/**
+	 * @param doInstall
+	 */
+	public void setDoUninstall(boolean doUninstall) {
+		this.doUninstall = doUninstall;
+	}
+
+	/**
+	 * @return
+	 */
+	public int getQueueSize() {
+		return 100 * 1000;
+	}
 
 }
