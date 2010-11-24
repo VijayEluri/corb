@@ -90,6 +90,6 @@ public class TestManager {
 		} catch (URISyntaxException e) {
 			logger.severe(e.getMessage());
 		}
+		logger.info("***** Corb task execution complete *****");
 	}
-
 }
