@@ -45,17 +45,17 @@ public class TestManager {
 	 * Unit test to prove the medline-iso8601.xqy arguments work
 	 */
 	@Test(expected = RuntimeException.class)
-	public void testFirstSampleInvocationWithoutFirstCopyingTheModules() {
+	public void testFirstSampleInvocationWithoutSpecifyingTheCorrectModulesDbForTheApplicationServer() {
 		invokeCorbWithArguments(TestHelper.getFirstSampleInvocation());
 	}
 
 	@Test(expected = RuntimeException.class)
-	public void testSecondSampleInvocationWithoutFirstCopyingTheModules() {
+	public void testSecondSampleInvocationWithoutSpecifyingTheCorrectModulesDbForTheApplicationServer() {
 		invokeCorbWithArguments(TestHelper.getSecondSampleInvocation());
 	}
 
 	@Test(expected = RuntimeException.class)
-	public void testThirdSampleInvocationWithoutFirstCopyingTheModules() {
+	public void testThirdSampleInvocationWithoutSpecifyingTheCorrectModulesDbForTheApplicationServer() {
 		invokeCorbWithArguments(TestHelper.getThirdSampleInvocation());
 	}
 
@@ -66,13 +66,13 @@ public class TestManager {
 	@Test
 	public void testFirstSampleInvocation() {
 		invokeCorbWithArguments(TestHelper
-				.getFirstSampleInvocationWithFlagToCopyModules());
+				.getFirstSampleInvocationWithCorrectXDBCModulesDatabase());
 	}
 
 	@Test
 	public void testSecondSampleInvocation() {
 		invokeCorbWithArguments(TestHelper
-				.getSecondSampleInvocationWithFlagToCopyModules());
+				.getSecondSampleInvocationWithCorrectXDBCModulesDatabase());
 	}
 
 	@Test
@@ -89,7 +89,8 @@ public class TestManager {
 	private void invokeCorbWithArguments(String[] arguments) {
 		logger.info("***** Corb task execution start *****");
 		logger.info(MessageFormat.format("Starting CORB on: {0}", new Date()));
-		logger.info(name.getMethodName() + " being run...");
+		logger.info("\n*************\n" + name.getMethodName()
+				+ " being run...\n*************\n");
 		try {
 			Manager.main(arguments);
 		} catch (URISyntaxException e) {

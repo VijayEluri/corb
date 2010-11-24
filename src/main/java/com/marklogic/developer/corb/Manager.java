@@ -69,6 +69,8 @@ import com.marklogic.xcc.types.XdmItem;
  * @author Colleen Whitney, MarkLogic Corporation
  * @author Alex Bleasdale, MarkLogic Corporation
  */
+
+// TODO - would be great if this class could check the XDBC configuration
 public class Manager implements Runnable {
 
 	public static String VERSION = "2010-11-24.JPMC";
@@ -333,6 +335,9 @@ public class Manager implements Runnable {
 						}
 						c = ContentFactory.newContent(moduleUri, is, opts);
 					}
+					logger.info(MessageFormat.format(
+							"Currently installing Module: {0} into: {1}",
+							moduleUri.toString(), modulesDatabase));
 					session.insertContent(c);
 				}
 			}
@@ -367,6 +372,53 @@ public class Manager implements Runnable {
 		} catch (NoSuchAlgorithmException e) {
 			logger.logException(connectionUri.toString(), e);
 			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * TODO - at some stage prepare and cleanup methods can be refactored as
+	 * there is a lot of code repetition
+	 */
+	private void cleanupInstalledModules() {
+		logger.info("\n*****************************************\n*  UNINSTALL SELECTED - MODULE CLEANUP  *\n*****************************************");
+		String[] resourceModules = new String[] { options.getUrisModule(),
+				options.getProcessModule() };
+		String modulesDatabase = options.getModulesDatabase();
+		StringBuilder sb = new StringBuilder();
+		sb.append(XQUERY_VERSION_1_0_ML);
+		// TODO - is any of this necessary? Delete if not.
+		/*
+		 * logger.info("checking modules, database: " + modulesDatabase);
+		 * InputStream is = null; Content c = null; ContentCreateOptions opts =
+		 * ContentCreateOptions.newTextInstance();
+		 */
+		for (int i = 0; i < resourceModules.length; i++) {
+			if (options.getModulesDatabase().equals("")) {
+				// TODO - can we manage the fs using this method? My guess is
+				// not - although I haven't tested this yet...
+				logger.warning("XCC configured for the filesystem: please delete modules manually");
+				return;
+			}
+			logger.info(MessageFormat.format("Deleting: {0} from: {1}",
+					resourceModules[i], modulesDatabase));
+
+			sb.append("xdmp:document-delete(\"")
+					.append(options.getModuleRoot()).append(resourceModules[i])
+					.append("\")");
+			if (i != resourceModules.length - 1) {
+				sb.append(";\n");
+			}
+		}
+		Session session = contentSource.newSession(modulesDatabase);
+		AdhocQuery q = session.newAdhocQuery(sb.toString());
+		logger.info("(Adhoc) Delete Query is:\n" + sb.toString());
+		try {
+			ResultSequence rs = session.submitRequest(q);
+			System.out.println(rs.asString());
+		} catch (RequestException e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
 		}
 	}
 
@@ -464,8 +516,6 @@ public class Manager implements Runnable {
 			// tasks down into "bite size chunks" e.g. 1m docs at a time
 			if (0 == total) {
 				logger.info("nothing to process");
-				// TODO - is this a good spot to perform the Module cleanup
-				// operation?
 				stop();
 				return;
 			}
@@ -504,6 +554,7 @@ public class Manager implements Runnable {
 			stop();
 			throw e;
 		} finally {
+
 			if (null != session) {
 				session.close();
 			}
@@ -552,6 +603,13 @@ public class Manager implements Runnable {
 		}
 		if (null != uriQueue) {
 			uriQueue.halt();
+		}
+
+		// Check whether the installed modules can be removed
+		if (options.isDoUninstall()) {
+			cleanupInstalledModules();
+		} else {
+			logger.info("not configured to delete the installed modules after completing - no more cleanup required.");
 		}
 	}
 

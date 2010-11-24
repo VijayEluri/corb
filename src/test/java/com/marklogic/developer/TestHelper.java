@@ -164,7 +164,7 @@ public class TestHelper {
 		return (args.toArray(new String[args.size()]));
 	}
 
-	public static String[] getFirstSampleInvocationWithFlagToCopyModules() {
+	public static String[] getFirstSampleInvocationWithCorrectXDBCModulesDatabase() {
 		List<String> args = new ArrayList<String>();
 		// URI
 		args.add(getCorbUnitTestConnectionUri());
@@ -173,15 +173,13 @@ public class TestHelper {
 		// XQ Transform Module
 		args.add("medline-iso8601.xqy");
 		// Threads
-		args.add(DEFAULT_THREADS);
+		args.add("");
 		// URI Selection Module
 		args.add("");
 		// Module root
-		args.add(MODULE_ROOT);
+		args.add("");
 		// Modules DB
 		args.add(TEST_DB_MODULES);
-		// Install
-		// args.add(INSTALL_MODULES_ON_SERVER); // true by default
 		return (args.toArray(new String[args.size()]));
 	}
 
@@ -215,7 +213,7 @@ public class TestHelper {
 		return (args.toArray(new String[args.size()]));
 	}
 
-	public static String[] getSecondSampleInvocationWithFlagToCopyModules() {
+	public static String[] getSecondSampleInvocationWithCorrectXDBCModulesDatabase() {
 		List<String> args = new ArrayList<String>();
 		// URI
 		args.add(getCorbUnitTestConnectionUri());
@@ -228,11 +226,9 @@ public class TestHelper {
 		// URI Selection module
 		args.add(BASIC_URI_SELECTION_MODULE);
 		// Module root
-		args.add(MODULE_ROOT);
+		args.add("");
 		// Modules DB
 		args.add(TEST_DB_MODULES);
-		// Install
-		// args.add(INSTALL_MODULES_ON_SERVER); // true by default
 		return (args.toArray(new String[args.size()]));
 	}
 
