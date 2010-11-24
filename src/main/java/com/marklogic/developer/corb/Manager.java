@@ -71,7 +71,7 @@ import com.marklogic.xcc.types.XdmItem;
  */
 public class Manager implements Runnable {
 
-	public static String VERSION = "2010-11-24.J";
+	public static String VERSION = "2010-11-24.JPMC";
 
 	public class CallerBlocksPolicy implements RejectedExecutionHandler {
 
@@ -235,7 +235,7 @@ public class Manager implements Runnable {
 		configureLogger();
 		logger.info(NAME + " starting: " + versionMessage);
 		long maxMemory = Runtime.getRuntime().maxMemory() / (1024 * 1024);
-		logger.info("maximum heap size = " + maxMemory + " MiB");
+		logger.info("maximum heap size = " + maxMemory + " MiB\n");
 
 		prepareContentSource();
 		registerStatusInfo();
@@ -376,10 +376,13 @@ public class Manager implements Runnable {
 	 * run corb with admin rights).
 	 */
 	private String obfuscatePassword(URI u) {
-		int pos = u.getUserInfo().lastIndexOf(":");
-		String userInfo = u.getUserInfo().substring(0, pos) + ":XXXXX";
-		return "xcc://" + userInfo + "@" + u.getHost() + ":" + u.getPort()
-				+ u.getPath();
+		String userInfo = u.getUserInfo().substring(0,
+				u.getUserInfo().lastIndexOf(":") + 1)
+				+ "*****";
+		StringBuilder sb = new StringBuilder();
+		sb.append("xcc://").append(userInfo).append("@").append(u.getHost())
+				.append(":").append(u.getPort()).append(u.getPath());
+		return sb.toString();
 	}
 
 	private void registerStatusInfo() {

@@ -181,7 +181,7 @@ public class TestHelper {
 		// Modules DB
 		args.add(TEST_DB_MODULES);
 		// Install
-		args.add(INSTALL_MODULES_ON_SERVER);
+		// args.add(INSTALL_MODULES_ON_SERVER); // true by default
 		return (args.toArray(new String[args.size()]));
 	}
 
@@ -232,7 +232,7 @@ public class TestHelper {
 		// Modules DB
 		args.add(TEST_DB_MODULES);
 		// Install
-		args.add(INSTALL_MODULES_ON_SERVER);
+		// args.add(INSTALL_MODULES_ON_SERVER); // true by default
 		return (args.toArray(new String[args.size()]));
 	}
 
@@ -290,7 +290,7 @@ public class TestHelper {
 		// Modules DB
 		args.add(TEST_DB_MODULES);
 		// Install
-		args.add(INSTALL_MODULES_ON_SERVER);
+		// args.add(INSTALL_MODULES_ON_SERVER); // true by default
 		return (args.toArray(new String[args.size()]));
 	}
 

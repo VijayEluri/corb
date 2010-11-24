@@ -5,7 +5,9 @@ import java.text.MessageFormat;
 import java.util.Date;
 
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 
 import com.marklogic.developer.SimpleLogger;
 import com.marklogic.developer.TestHelper;
@@ -25,6 +27,8 @@ public class TestManager {
 	static SimpleLogger logger;
 
 	// URI connectionUri = null;
+	@Rule
+	public TestName name = new TestName();
 
 	@BeforeClass
 	public static void setup() {
@@ -83,8 +87,9 @@ public class TestManager {
 	}
 
 	private void invokeCorbWithArguments(String[] arguments) {
+		logger.info("***** Corb task execution start *****");
 		logger.info(MessageFormat.format("Starting CORB on: {0}", new Date()));
-
+		logger.info(name.getMethodName() + " being run...");
 		try {
 			Manager.main(arguments);
 		} catch (URISyntaxException e) {
