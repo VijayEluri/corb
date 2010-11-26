@@ -1,9 +1,12 @@
 package com.marklogic.developer.corb;
 
+import static org.junit.Assert.assertEquals;
+
 import java.net.URISyntaxException;
 import java.text.MessageFormat;
 import java.util.Date;
 
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -11,6 +14,7 @@ import org.junit.rules.TestName;
 
 import com.marklogic.developer.SimpleLogger;
 import com.marklogic.developer.TestHelper;
+import com.marklogic.developer.XCCConnectionProvider;
 
 /**
  * com.marklogic.developer.corb.Manager xcc://user:password@host:port/[ database
@@ -26,6 +30,8 @@ public class ManagerTest {
 	// String corbModuleFolder;
 	static SimpleLogger logger;
 
+	static XCCConnectionProvider xcccp;
+
 	// URI connectionUri = null;
 	@Rule
 	public TestName name = new TestName();
@@ -33,6 +39,8 @@ public class ManagerTest {
 	@BeforeClass
 	public static void setup() {
 		logger = SimpleLogger.getSimpleLogger();
+		xcccp = new XCCConnectionProvider(
+				TestHelper.getCorbUnitTestConnectionUriWithModulesDb());
 	}
 
 	/*
@@ -81,9 +89,26 @@ public class ManagerTest {
 				.getThirdSampleInvocationWithFlagToCopyModules());
 	}
 
+	@Before
+	public void clearModulesBeforeRunningEachTest() {
+		logger.info("Clearing the Test Modules Database before");
+		xcccp.buildConnection(TestHelper.UNIT_TEST_CLEANUP_MODULES_DB);
+	}
+
 	@Test
 	public void testWithAllArgs() {
 		invokeCorbWithArguments(TestHelper.getFullCorbArgs());
+		assertEquals(
+				"Ensuring the Modules have been deleted from the modules DB: ",
+				"0", xcccp.getEstimatedDocsInDb());
+	}
+
+	@Test
+	public void testWithAllArgsExceptDelete() {
+		invokeCorbWithArguments(TestHelper.getFullCorbArgsWithoutDeleteFlag());
+		assertEquals(
+				"Ensuring the Modules have *NOT* deleted from the modules DB (there should be 2): ",
+				"2", xcccp.getEstimatedDocsInDb());
 	}
 
 	private void invokeCorbWithArguments(String[] arguments) {
@@ -98,4 +123,5 @@ public class ManagerTest {
 		}
 		logger.info("***** Corb task execution complete *****\n");
 	}
+
 }

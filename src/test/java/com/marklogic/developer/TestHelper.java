@@ -67,6 +67,8 @@ public class TestHelper {
 			+ "teardown-test-environment.xqy";
 	public static final String UNIT_TEST_POPULATE_DB = UNIT_TEST_MODULE_ROOT
 			+ "populate-test-environment.xqy";
+	public static final String UNIT_TEST_CLEANUP_MODULES_DB = UNIT_TEST_MODULE_ROOT
+			+ "clean-db.xqy";
 
 	/* Modules used for unit tests */
 	public static final String BASIC_TRANSFORM_MODULE = "basic-transform-module.xqy";
@@ -113,6 +115,11 @@ public class TestHelper {
 	 */
 	public static String getCorbUnitTestConnectionUri() {
 		return getConnectionUri(BASE_CONNECTION_URI + ":" + TEST_APPSERVER_PORT);
+	}
+
+	public static String getCorbUnitTestConnectionUriWithModulesDb() {
+		return getConnectionUri(BASE_CONNECTION_URI + ":" + TEST_APPSERVER_PORT
+				+ "/" + TEST_DB_MODULES);
 	}
 
 	/**
@@ -322,6 +329,27 @@ public class TestHelper {
 		args.add(INSTALL_MODULES_ON_SERVER);
 		// Remove modules after (*one of the newly requested features*)
 		args.add(REMOVE_MODULES_AFTER);
+		return (args.toArray(new String[args.size()]));
+	}
+
+	public static String[] getFullCorbArgsWithoutDeleteFlag() {
+		List<String> args = new ArrayList<String>();
+		// URI
+		args.add(getCorbUnitTestConnectionUri());
+		// Collection
+		args.add(DEFAULT_COLLECTION);
+		// XQ Transform Module
+		args.add(BASIC_TRANSFORM_MODULE);
+		// Threads
+		args.add(DEFAULT_THREADS);
+		// URI Selection module
+		args.add(BASIC_URI_SELECTION_MODULE);
+		// Module root
+		args.add(MODULE_ROOT);
+		// Modules DB
+		args.add(TEST_DB_MODULES);
+		// Install
+		args.add(INSTALL_MODULES_ON_SERVER);
 		return (args.toArray(new String[args.size()]));
 	}
 

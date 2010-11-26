@@ -2,6 +2,7 @@ package com.marklogic.developer.corb;
 
 import java.io.IOException;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -41,7 +42,7 @@ public class TestSuite {
 				TestHelper.UNIT_TEST_POPULATE_DB, false);
 	}
 
-	// @AfterClass
+	@AfterClass
 	public static void tearDown() {
 		logger.info("Tearing down unit test");
 		xcccp = new XCCConnectionProvider(TestHelper.getConnectionUri());
