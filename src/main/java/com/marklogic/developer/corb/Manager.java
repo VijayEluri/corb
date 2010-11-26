@@ -263,6 +263,14 @@ public class Manager implements Runnable {
 			// fatal
 			throw new RuntimeException(e);
 		}
+		// CAN WE place the cleanup here
+
+		// Check whether the installed modules can be removed
+		if (options.isDoUninstall()) {
+			cleanupInstalledModules();
+		} else {
+			logger.info("not configured to delete the installed modules after completing - no more cleanup required.");
+		}
 	}
 
 	/**
@@ -380,7 +388,7 @@ public class Manager implements Runnable {
 	 * there is a lot of code repetition
 	 */
 	private void cleanupInstalledModules() {
-		logger.info("\n*****************************************\n*  UNINSTALL SELECTED - MODULE CLEANUP  *\n*****************************************");
+		logger.fine("\n*****************************************\n*  UNINSTALL SELECTED - MODULE CLEANUP  *\n*****************************************");
 		String[] resourceModules = new String[] { options.getUrisModule(),
 				options.getProcessModule() };
 		String modulesDatabase = options.getModulesDatabase();
@@ -411,7 +419,7 @@ public class Manager implements Runnable {
 		}
 		Session session = contentSource.newSession(modulesDatabase);
 		AdhocQuery q = session.newAdhocQuery(sb.toString());
-		logger.info("(Adhoc) Delete Query is:\n" + sb.toString());
+		logger.fine("(Adhoc) Delete Query is:\n" + sb.toString());
 		try {
 			ResultSequence rs = session.submitRequest(q);
 			System.out.println(rs.asString());
@@ -603,13 +611,6 @@ public class Manager implements Runnable {
 		}
 		if (null != uriQueue) {
 			uriQueue.halt();
-		}
-
-		// Check whether the installed modules can be removed
-		if (options.isDoUninstall()) {
-			cleanupInstalledModules();
-		} else {
-			logger.info("not configured to delete the installed modules after completing - no more cleanup required.");
 		}
 	}
 

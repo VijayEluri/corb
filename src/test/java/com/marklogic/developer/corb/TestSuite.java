@@ -18,7 +18,7 @@ import com.marklogic.xcc.Session;
 import com.marklogic.xcc.exceptions.RequestException;
 
 @RunWith(Suite.class)
-@SuiteClasses({ TestManager.class })
+@SuiteClasses({ ManagerTest.class })
 public class TestSuite {
 
 	static SimpleLogger logger;

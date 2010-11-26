@@ -20,7 +20,7 @@ import com.marklogic.developer.TestHelper;
  * @author ableasdale
  * 
  */
-public class TestManager {
+public class ManagerTest {
 
 	// String home;
 	// String corbModuleFolder;
