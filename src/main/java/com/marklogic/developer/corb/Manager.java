@@ -73,7 +73,7 @@ import com.marklogic.xcc.types.XdmItem;
 // TODO - would be great if this class could check the XDBC configuration
 public class Manager implements Runnable {
 
-	public static String VERSION = "2010-11-24.JPMC";
+	public static String VERSION = "2010-11-26.JPMC";
 
 	public class CallerBlocksPolicy implements RejectedExecutionHandler {
 
