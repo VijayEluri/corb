@@ -350,6 +350,54 @@ public class TestHelper {
 		args.add(TEST_DB_MODULES);
 		// Install
 		args.add(INSTALL_MODULES_ON_SERVER);
+		// Remove modules after (*one of the newly requested features*)
+		args.add(DO_NOT_REMOVE_MODULES_AFTER);
+		return (args.toArray(new String[args.size()]));
+	}
+
+	public static String[] getFullCorbArgsWithEmptyDeleteFlag() {
+		List<String> args = new ArrayList<String>();
+		// URI
+		args.add(getCorbUnitTestConnectionUri());
+		// Collection
+		args.add(DEFAULT_COLLECTION);
+		// XQ Transform Module
+		args.add(BASIC_TRANSFORM_MODULE);
+		// Threads
+		args.add(DEFAULT_THREADS);
+		// URI Selection module
+		args.add(BASIC_URI_SELECTION_MODULE);
+		// Module root
+		args.add(MODULE_ROOT);
+		// Modules DB
+		args.add(TEST_DB_MODULES);
+		// Install
+		args.add(INSTALL_MODULES_ON_SERVER);
+		// Remove modules after (*one of the newly requested features*)
+		args.add("");
+		return (args.toArray(new String[args.size()]));
+	}
+	
+	public static String[] getFullCorbArgsWithoutInstallingModules() {
+		List<String> args = new ArrayList<String>();
+		// URI
+		args.add(getCorbUnitTestConnectionUri());
+		// Collection
+		args.add(DEFAULT_COLLECTION);
+		// XQ Transform Module
+		args.add(BASIC_TRANSFORM_MODULE);
+		// Threads
+		args.add(DEFAULT_THREADS);
+		// URI Selection module
+		args.add(BASIC_URI_SELECTION_MODULE);
+		// Module root
+		args.add(MODULE_ROOT);
+		// Modules DB
+		args.add(TEST_DB_MODULES);
+		// Install
+		args.add(DO_NOT_INSTALL_MODULES_ON_SERVER);
+		// Remove modules after (*one of the newly requested features*)
+		args.add("");
 		return (args.toArray(new String[args.size()]));
 	}
 

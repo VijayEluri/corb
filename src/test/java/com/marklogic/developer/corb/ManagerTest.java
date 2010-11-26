@@ -44,6 +44,15 @@ public class ManagerTest {
 	}
 
 	/*
+	 * Before each unit test clear the [unit test] modules-db folder
+	 */
+	@Before
+	public void clearModulesBeforeRunningEachTest() {
+		logger.info("Clearing the Test Modules Database before");
+		xcccp.buildConnection(TestHelper.UNIT_TEST_CLEANUP_MODULES_DB);
+	}
+	
+	/*
 	 * The following three tests (below) should all throw a RuntimeException as
 	 * the Modules can't be located. This is correct behaviour for the
 	 * configuration arguments passed in
@@ -89,12 +98,6 @@ public class ManagerTest {
 				.getThirdSampleInvocationWithFlagToCopyModules());
 	}
 
-	@Before
-	public void clearModulesBeforeRunningEachTest() {
-		logger.info("Clearing the Test Modules Database before");
-		xcccp.buildConnection(TestHelper.UNIT_TEST_CLEANUP_MODULES_DB);
-	}
-
 	@Test
 	public void testWithAllArgs() {
 		invokeCorbWithArguments(TestHelper.getFullCorbArgs());
@@ -110,18 +113,38 @@ public class ManagerTest {
 				"Ensuring the Modules have *NOT* deleted from the modules DB (there should be 2): ",
 				"2", xcccp.getEstimatedDocsInDb());
 	}
+	
+	@Test 
+	public void testWithAnEmptyStringForTheModuleDeleteArgument(){
+		invokeCorbWithArguments(TestHelper.getFullCorbArgsWithEmptyDeleteFlag());
+		assertEquals(
+				"Ensuring the Modules have *NOT* deleted from the modules DB (there should be 2): ",
+				"2", xcccp.getEstimatedDocsInDb());
+	}
+	
+	@Test(expected = RuntimeException.class)
+	public void testNotInstallingModulesFirst(){
+		assertEquals(
+				"Ensuring the Modules have been deleted from the modules DB: ",
+				"0", xcccp.getEstimatedDocsInDb());
+		invokeCorbWithArguments(TestHelper.getFullCorbArgsWithoutInstallingModules());
+	}
 
 	private void invokeCorbWithArguments(String[] arguments) {
-		logger.info("***** Corb task execution start *****");
-		logger.info(MessageFormat.format("Starting CORB on: {0}", new Date()));
-		logger.info("\n*************\n" + name.getMethodName()
-				+ " being run...\n*************\n");
+		logger.fine("***** Corb task execution start *****");
+		logger.fine(MessageFormat.format("Starting CORB on: {0}", new Date()));
+		logger.info(partition() + name.getMethodName()
+				+ " being run..." + partition());
 		try {
 			Manager.main(arguments);
 		} catch (URISyntaxException e) {
 			logger.severe(e.getMessage());
 		}
-		logger.info("***** Corb task execution complete *****\n");
+		logger.fine("***** Corb task execution complete *****\n");
+	}
+	
+	private String partition(){
+		return "\n**********************************************************************************\n";
 	}
 
 }
