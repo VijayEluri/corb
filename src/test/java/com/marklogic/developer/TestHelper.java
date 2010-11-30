@@ -39,7 +39,10 @@ public class TestHelper {
 	 */
 
 	/* Connection URI management */
-	private static final String BASE_CONNECTION_URI = "xcc://admin:admin@localhost";
+	// private static final String BASE_CONNECTION_URI =
+	// "xcc://corb-user:corb@localhost";
+	private static final String BASE_ADMIN_CONNECTION_URI = "xcc://admin:admin@localhost";
+	private static final String BASE_CONNECTION_URI = "xcc://corb-user:corb@localhost";
 	private static final String INITIAL_CONNECTION_PORT = "8010";
 	private static final String TEST_APPSERVER_PORT = "9997";
 
@@ -56,7 +59,7 @@ public class TestHelper {
 	private static final String DO_NOT_INSTALL_MODULES_ON_SERVER = "false";
 
 	/* Generic CORB Module root and default Collection arguments */
-	private static final String MODULE_ROOT = "/";
+	private static final String MODULE_ROOT = "/corb/";
 	private static final String DEFAULT_COLLECTION = "";
 
 	/* Unit test specific CORB arguments - used for running the test suite */
@@ -104,6 +107,22 @@ public class TestHelper {
 	public static String getConnectionUri() {
 		return getConnectionUri(BASE_CONNECTION_URI + ":"
 				+ INITIAL_CONNECTION_PORT);
+	}
+
+	/**
+	 * Used for setup and teardown of unit tests, *not* the CORB processing
+	 * itself
+	 * 
+	 * @return
+	 */
+	public static String getAdminConnectionUri() {
+		return getConnectionUri(BASE_ADMIN_CONNECTION_URI + ":"
+				+ INITIAL_CONNECTION_PORT);
+	}
+
+	public static String getAdminConnectionUriWithDatabaseUri() {
+		return getConnectionUri(BASE_ADMIN_CONNECTION_URI + ":"
+				+ TEST_APPSERVER_PORT + "/" + TEST_DB);
 	}
 
 	/**
@@ -190,6 +209,25 @@ public class TestHelper {
 		return (args.toArray(new String[args.size()]));
 	}
 
+	public static String[] getFirstSampleInvocationWithCorrectXDBCModulesDatabaseAndModuleRoot() {
+		List<String> args = new ArrayList<String>();
+		// URI
+		args.add(getCorbUnitTestConnectionUri());
+		// Collection
+		args.add(DEFAULT_COLLECTION);
+		// XQ Transform Module
+		args.add("medline-iso8601.xqy");
+		// Threads
+		args.add("");
+		// URI Selection Module
+		args.add("");
+		// Module root
+		args.add(MODULE_ROOT);
+		// Modules DB
+		args.add(TEST_DB_MODULES);
+		return (args.toArray(new String[args.size()]));
+	}
+
 	/*
 	 * S E C O N D S A M P L E I N V O C A T I O N (S)
 	 */
@@ -234,6 +272,25 @@ public class TestHelper {
 		args.add(BASIC_URI_SELECTION_MODULE);
 		// Module root
 		args.add("");
+		// Modules DB
+		args.add(TEST_DB_MODULES);
+		return (args.toArray(new String[args.size()]));
+	}
+
+	public static String[] getSecondSampleInvocationWithCorrectXDBCModulesDatabaseAndModuleRoot() {
+		List<String> args = new ArrayList<String>();
+		// URI
+		args.add(getCorbUnitTestConnectionUri());
+		// Collection
+		args.add(DEFAULT_COLLECTION);
+		// XQ Transform Module
+		args.add(BASIC_TRANSFORM_MODULE);
+		// Threads
+		args.add(DEFAULT_THREADS);
+		// URI Selection module
+		args.add(BASIC_URI_SELECTION_MODULE);
+		// Module root
+		args.add(MODULE_ROOT);
 		// Modules DB
 		args.add(TEST_DB_MODULES);
 		return (args.toArray(new String[args.size()]));

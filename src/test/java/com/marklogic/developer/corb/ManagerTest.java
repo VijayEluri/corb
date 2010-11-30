@@ -71,16 +71,34 @@ public class ManagerTest {
 	 * The following tests have flags to first install the modules
 	 */
 
+	// @Test(expected = com.marklogic.xcc.exceptions.XQueryException.class)
+	@Test(expected = RuntimeException.class)
+	public void testFirstSampleInvocationWithIncorrectModuleRootPath() {
+		invokeCorbWithArguments(TestHelper
+				.getFirstSampleInvocationWithCorrectXDBCModulesDatabase());
+	}
+
+	// @Test(expected = com.marklogic.xcc.exceptions.XQueryException.class)
+	@Test(expected = RuntimeException.class)
+	public void testSecondSampleInvocationWithIncorrectModuleRootPath() {
+		invokeCorbWithArguments(TestHelper
+				.getSecondSampleInvocationWithCorrectXDBCModulesDatabase());
+	}
+
+	/**
+	 * These work correctly with the modified Module root (/corb/)
+	 */
+
 	@Test
 	public void testFirstSampleInvocation() {
 		invokeCorbWithArguments(TestHelper
-				.getFirstSampleInvocationWithCorrectXDBCModulesDatabase());
+				.getFirstSampleInvocationWithCorrectXDBCModulesDatabaseAndModuleRoot());
 	}
 
 	@Test
 	public void testSecondSampleInvocation() {
 		invokeCorbWithArguments(TestHelper
-				.getSecondSampleInvocationWithCorrectXDBCModulesDatabase());
+				.getSecondSampleInvocationWithCorrectXDBCModulesDatabaseAndModuleRoot());
 	}
 
 	@Test
@@ -114,8 +132,7 @@ public class ManagerTest {
 	private void invokeCorbWithArguments(String[] arguments) {
 		logger.info("***** Corb task execution start *****");
 		logger.info(MessageFormat.format("Starting CORB on: {0}", new Date()));
-		logger.info("\n*************\n" + name.getMethodName()
-				+ " being run...\n*************\n");
+		logger.info("Currently running the test: " + name.getMethodName());
 		try {
 			Manager.main(arguments);
 		} catch (URISyntaxException e) {

@@ -40,7 +40,7 @@ public class TeardownOnTestSuiteFailure {
 	static XCCConnectionProvider xcccp;
 
 	public static void main(String[] args) {
-		xcccp = new XCCConnectionProvider(TestHelper.getConnectionUri());
+		xcccp = new XCCConnectionProvider(TestHelper.getAdminConnectionUri());
 		ContentSource cs = xcccp.getContentSource();
 		buildConnection(cs, TestHelper.UNIT_TEST_TEARDOWN, true);
 		try {
