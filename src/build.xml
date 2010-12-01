@@ -24,7 +24,7 @@
     <property file="build.properties"/>
 
     <property name="src.dir" value="java"/>
-    <property name="dist.dir" value="../lib"/>
+    <property name="dist.dir" value="../release"/>
     <property name="build.dir" value="${src.dir}"/>
 
     <path id="master-classpath">
