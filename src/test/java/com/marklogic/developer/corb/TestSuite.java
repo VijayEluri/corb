@@ -18,6 +18,7 @@ import com.marklogic.xcc.ResultSequence;
 import com.marklogic.xcc.Session;
 import com.marklogic.xcc.exceptions.RequestException;
 
+//@RunWith(JUnit4ClassRunner.class)
 @RunWith(Suite.class)
 @SuiteClasses({ ManagerTest.class })
 public class TestSuite {

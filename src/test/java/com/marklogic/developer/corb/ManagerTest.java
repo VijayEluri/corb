@@ -51,6 +51,8 @@ public class ManagerTest {
 
 	/**
 	 * Unit test to prove the medline-iso8601.xqy arguments work
+	 * 
+	 * @throws URISyntaxException
 	 */
 	@Test(expected = RuntimeException.class)
 	public void testFirstSampleInvocationWithoutSpecifyingTheCorrectModulesDbForTheApplicationServer() {
@@ -72,6 +74,14 @@ public class ManagerTest {
 	 */
 
 	// @Test(expected = com.marklogic.xcc.exceptions.XQueryException.class)
+	// @Test(expected = RuntimeException.class)
+
+	// @Rule
+	// ublic Class<XQueryException> thrown =
+	// com.marklogic.xcc.exceptions.XQueryException.class;
+
+	// @ExpectedException(class=com.marklogic.xcc.exceptions.XQueryException.class,
+	// message="Exception Message", causeException)
 	@Test(expected = RuntimeException.class)
 	public void testFirstSampleInvocationWithIncorrectModuleRootPath() {
 		invokeCorbWithArguments(TestHelper
