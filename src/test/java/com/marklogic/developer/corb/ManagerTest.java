@@ -3,8 +3,6 @@ package com.marklogic.developer.corb;
 import static org.junit.Assert.assertEquals;
 
 import java.net.URISyntaxException;
-import java.text.MessageFormat;
-import java.util.Date;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -26,13 +24,9 @@ import com.marklogic.developer.XCCConnectionProvider;
  */
 public class ManagerTest {
 
-	// String home;
-	// String corbModuleFolder;
 	static SimpleLogger logger;
-
 	static XCCConnectionProvider xcccp;
 
-	// URI connectionUri = null;
 	@Rule
 	public TestName name = new TestName();
 
@@ -55,7 +49,7 @@ public class ManagerTest {
 	/*
 	 * The following three tests (below) should all throw a RuntimeException as
 	 * the Modules can't be located. This is correct behaviour for the
-	 * configuration arguments passed in
+	 * configuration arguments passed in.
 	 */
 
 	/**
@@ -64,44 +58,78 @@ public class ManagerTest {
 	 * @throws URISyntaxException
 	 */
 	@Test(expected = RuntimeException.class)
-	public void testFirstSampleInvocationWithoutSpecifyingTheCorrectModulesDbForTheApplicationServer() {
-		invokeCorbWithArguments(TestHelper.getFirstSampleInvocation());
+	public void testFirstSampleInvocationWithoutSpecifyingTheCorrectModulesDbForTheApplicationServer()
+			throws Exception {
+		try {
+			invokeCorbWithArguments(TestHelper.getFirstSampleInvocation());
+		} catch (Exception e) {
+			assertEquals(
+					"Should throw a permissions error: ",
+					"com.marklogic.xcc.exceptions.XQueryException: SEC-PERMDENIED: Permission denied\nin /insert",
+					e.getLocalizedMessage());
+			throw e;
+		}
 	}
 
 	@Test(expected = RuntimeException.class)
-	public void testSecondSampleInvocationWithoutSpecifyingTheCorrectModulesDbForTheApplicationServer() {
-		invokeCorbWithArguments(TestHelper.getSecondSampleInvocation());
+	public void testSecondSampleInvocationWithoutSpecifyingTheCorrectModulesDbForTheApplicationServer()
+			throws Exception {
+		try {
+			invokeCorbWithArguments(TestHelper.getSecondSampleInvocation());
+		} catch (Exception e) {
+			assertEquals(
+					"Should throw a SEC-URIPRIV: ",
+					"com.marklogic.xcc.exceptions.XQueryException: SEC-URIPRIV: URI privilege required\nin /insert",
+					e.getLocalizedMessage());
+			throw e;
+		}
 	}
 
 	@Test(expected = RuntimeException.class)
-	public void testThirdSampleInvocationWithoutSpecifyingTheCorrectModulesDbForTheApplicationServer() {
-		invokeCorbWithArguments(TestHelper.getThirdSampleInvocation());
+	public void testThirdSampleInvocationWithoutSpecifyingTheCorrectModulesDbForTheApplicationServer()
+			throws Exception {
+		try {
+			invokeCorbWithArguments(TestHelper.getThirdSampleInvocation());
+		} catch (Exception e) {
+			assertEquals(
+					"Should throw an XDMP-TEXTNODE: ",
+					"com.marklogic.xcc.exceptions.XQueryException: XDMP-TEXTNODE: /corb/basic-uri-selection.xqy -- Server unable to build program from non-text document\nin /corb/basic-uri-selection.xqy\nexpr: /corb/basic-uri-selection.xqy",
+					e.getLocalizedMessage());
+			throw e;
+		}
 	}
 
 	/*
 	 * The following tests have flags to first install the modules
 	 */
-
-	// @Test(expected = com.marklogic.xcc.exceptions.XQueryException.class)
-	// @Test(expected = RuntimeException.class)
-
-	// @Rule
-	// ublic Class<XQueryException> thrown =
-	// com.marklogic.xcc.exceptions.XQueryException.class;
-
-	// @ExpectedException(class=com.marklogic.xcc.exceptions.XQueryException.class,
-	// message="Exception Message", causeException)
 	@Test(expected = RuntimeException.class)
-	public void testFirstSampleInvocationWithIncorrectModuleRootPath() {
-		invokeCorbWithArguments(TestHelper
-				.getFirstSampleInvocationWithCorrectXDBCModulesDatabase());
+	public void testFirstSampleInvocationWithIncorrectModuleRootPath()
+			throws Exception {
+		try {
+			invokeCorbWithArguments(TestHelper
+					.getFirstSampleInvocationWithCorrectXDBCModulesDatabase());
+		} catch (Exception e) {
+			assertEquals(
+					"Should throw a SEC-URIPRIV: ",
+					"com.marklogic.xcc.exceptions.XQueryException: SEC-URIPRIV: URI privilege required\nin /insert",
+					e.getLocalizedMessage());
+			throw e;
+		}
 	}
 
-	// @Test(expected = com.marklogic.xcc.exceptions.XQueryException.class)
 	@Test(expected = RuntimeException.class)
-	public void testSecondSampleInvocationWithIncorrectModuleRootPath() {
-		invokeCorbWithArguments(TestHelper
-				.getSecondSampleInvocationWithCorrectXDBCModulesDatabase());
+	public void testSecondSampleInvocationWithIncorrectModuleRootPath()
+			throws Exception {
+		try {
+			invokeCorbWithArguments(TestHelper
+					.getSecondSampleInvocationWithCorrectXDBCModulesDatabase());
+		} catch (Exception e) {
+			assertEquals(
+					"Should throw a SEC-URIPRIV: ",
+					"com.marklogic.xcc.exceptions.XQueryException: SEC-URIPRIV: URI privilege required\nin /insert",
+					e.getLocalizedMessage());
+			throw e;
+		}
 	}
 
 	/**
@@ -109,26 +137,26 @@ public class ManagerTest {
 	 */
 
 	@Test
-	public void testFirstSampleInvocation() {
+	public void testFirstSampleInvocation() throws Exception {
 		invokeCorbWithArguments(TestHelper
 				.getFirstSampleInvocationWithCorrectXDBCModulesDatabaseAndModuleRoot());
 
 	}
 
 	@Test
-	public void testSecondSampleInvocation() {
+	public void testSecondSampleInvocation() throws Exception {
 		invokeCorbWithArguments(TestHelper
 				.getSecondSampleInvocationWithCorrectXDBCModulesDatabaseAndModuleRoot());
 	}
 
 	@Test
-	public void testThirdSampleInvocation() {
+	public void testThirdSampleInvocation() throws Exception {
 		invokeCorbWithArguments(TestHelper
 				.getThirdSampleInvocationWithFlagToCopyModules());
 	}
 
 	@Test
-	public void testWithAllArgs() {
+	public void testWithAllArgs() throws Exception {
 		invokeCorbWithArguments(TestHelper.getFullCorbArgs());
 		assertEquals(
 				"Ensuring the Modules have been deleted from the modules DB: ",
@@ -136,7 +164,7 @@ public class ManagerTest {
 	}
 
 	@Test
-	public void testWithAllArgsExceptDelete() {
+	public void testWithAllArgsExceptDelete() throws Exception {
 		invokeCorbWithArguments(TestHelper.getFullCorbArgsWithoutDeleteFlag());
 		assertEquals(
 				"Ensuring the Modules have *NOT* deleted from the modules DB (there should be 2): ",
@@ -144,7 +172,8 @@ public class ManagerTest {
 	}
 
 	@Test
-	public void testWithAnEmptyStringForTheModuleDeleteArgument() {
+	public void testWithAnEmptyStringForTheModuleDeleteArgument()
+			throws Exception {
 		invokeCorbWithArguments(TestHelper.getFullCorbArgsWithEmptyDeleteFlag());
 		assertEquals(
 				"Ensuring the Modules have *NOT* deleted from the modules DB (there should be 2): ",
@@ -152,25 +181,24 @@ public class ManagerTest {
 	}
 
 	@Test(expected = RuntimeException.class)
-	public void testNotInstallingModulesFirst() {
+	public void testNotInstallingModulesFirst() throws Exception {
 		assertEquals(
 				"Ensuring the Modules have been deleted from the modules DB: ",
 				"0", xcccp.getEstimatedDocsInDb());
-		invokeCorbWithArguments(TestHelper
-				.getFullCorbArgsWithoutInstallingModules());
-	}
-
-	private void invokeCorbWithArguments(String[] arguments) {
-		logger.info("***** Corb task execution start *****");
-		logger.info(MessageFormat.format("Starting CORB on: {0}", new Date()));
-		logger.info("Currently running the test: " + name.getMethodName());
-
 		try {
-			Manager.main(arguments);
-		} catch (URISyntaxException e) {
-			logger.severe(e.getMessage());
+			invokeCorbWithArguments(TestHelper
+					.getFullCorbArgsWithoutInstallingModules());
+		} catch (Exception e) {
+			assertEquals(
+					"Should throw an XDMP-TEXTNODE: ",
+					"com.marklogic.xcc.exceptions.XQueryException: XDMP-TEXTNODE: /corb/basic-uri-selection.xqy -- Server unable to build program from non-text document\nin /corb/basic-uri-selection.xqy\nexpr: /corb/basic-uri-selection.xqy",
+					e.getLocalizedMessage());
+			throw e;
 		}
-		logger.fine("***** Corb task execution complete *****\n");
 	}
 
+	private void invokeCorbWithArguments(String[] arguments) throws Exception {
+		logger.info("\n\nCurrently running the test: " + name.getMethodName());
+		Manager.main(arguments);
+	}
 }
