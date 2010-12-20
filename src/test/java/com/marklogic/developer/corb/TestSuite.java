@@ -18,8 +18,9 @@ import com.marklogic.xcc.ResultSequence;
 import com.marklogic.xcc.Session;
 import com.marklogic.xcc.exceptions.RequestException;
 
+//@RunWith(JUnit4ClassRunner.class)
 @RunWith(Suite.class)
-@SuiteClasses({ ManagerTest.class })
+@SuiteClasses({ ManagerTestNew.class })
 public class TestSuite {
 
 	static SimpleLogger logger;
@@ -30,14 +31,14 @@ public class TestSuite {
 		logger = SimpleLogger.getSimpleLogger();
 		logger.info("Setting up unit test");
 		logger.info("Creating Databases and Forests for tests");
-		xcccp = new XCCConnectionProvider(TestHelper.getConnectionUri());
+		xcccp = new XCCConnectionProvider(TestHelper.getAdminConnectionUri());
 		buildConnection(xcccp.getContentSource(), TestHelper.UNIT_TEST_SETUP,
 				false);
 
 		logger.info("Populating test Database");
 		// Now we have the DBs set up, change to:
 		xcccp = new XCCConnectionProvider(
-				TestHelper.getCorbUnitTestConnectionUri());
+				TestHelper.getAdminConnectionUriWithDatabaseUri());
 		buildConnection(xcccp.getContentSource(),
 				TestHelper.UNIT_TEST_POPULATE_DB, false);
 	}
@@ -45,7 +46,7 @@ public class TestSuite {
 	@AfterClass
 	public static void tearDown() {
 		logger.info("Tearing down unit test");
-		xcccp = new XCCConnectionProvider(TestHelper.getConnectionUri());
+		xcccp = new XCCConnectionProvider(TestHelper.getAdminConnectionUri());
 		buildConnection(xcccp.getContentSource(),
 				TestHelper.UNIT_TEST_TEARDOWN, true);
 		logger.info("Sleeping momentarily while MarkLogic restarts...");

@@ -7,7 +7,6 @@ import com.marklogic.developer.Utilities;
 import com.marklogic.developer.XCCConnectionProvider;
 import com.marklogic.xcc.ContentSource;
 import com.marklogic.xcc.Request;
-import com.marklogic.xcc.ResultSequence;
 import com.marklogic.xcc.Session;
 import com.marklogic.xcc.exceptions.RequestException;
 
@@ -40,7 +39,7 @@ public class TeardownOnTestSuiteFailure {
 	static XCCConnectionProvider xcccp;
 
 	public static void main(String[] args) {
-		xcccp = new XCCConnectionProvider(TestHelper.getConnectionUri());
+		xcccp = new XCCConnectionProvider(TestHelper.getAdminConnectionUri());
 		ContentSource cs = xcccp.getContentSource();
 		buildConnection(cs, TestHelper.UNIT_TEST_TEARDOWN, true);
 		try {
@@ -71,7 +70,7 @@ public class TeardownOnTestSuiteFailure {
 					.readFile(queryFilePath));
 			request = TestHelper.setTestConfigurationVariables(request,
 					startTeardown);
-			ResultSequence rs = session.submitRequest(request);
+			session.submitRequest(request);
 			session.close();
 		} catch (IOException e) {
 			e.printStackTrace();
