@@ -23,7 +23,7 @@
     <property name="name" value="corb"/>
     <property file="build.properties"/>
 
-    <property name="src.dir" value="java"/>
+    <property name="src.dir" value="main/java"/>
     <property name="dist.dir" value="../release"/>
     <property name="build.dir" value="${src.dir}"/>
 
