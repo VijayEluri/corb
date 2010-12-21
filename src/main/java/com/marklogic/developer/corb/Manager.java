@@ -486,7 +486,7 @@ public class Manager implements Runnable {
 			}
 		}
 		logger.info(MessageFormat
-				.format("\nCORB configuration status:\nConfigured modules db: {0}\nConfigured XDBC root: {1}\nConfigured uri module: {2}\nConfigured process module: {3}\nInstall Modules First: {4}\nUninstall Modules After Processing: {5}\nConfigured modules root: {6}\nConfigured queue size: {7}\nConfigured number of Threads: {8}\n",
+				.format("\n+============================+\n| CORB configuration status: |\n+============================+\nConfigured modules db: {0}\nConfigured XDBC root: {1}\nConfigured uri module: {2}\nConfigured process module: {3}\nInstall Modules First: {4}\nUninstall Modules After Processing: {5}\nConfigured modules root: {6}\nConfigured queue size: {7}\nConfigured number of Threads: {8}\n",
 						options.getModulesDatabase(), options.getXDBC_ROOT(),
 						options.getUrisModule(), options.getProcessModule(),
 						options.isDoInstall(), options.isDoUninstall(),
