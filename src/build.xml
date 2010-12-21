@@ -20,39 +20,35 @@
  */
 -->
 <project name="corb" basedir="." default="jar">
-    <property name="name" value="corb"/>
-    <property file="build.properties"/>
+	<property name="name" value="corb" />
+	<property file="build.properties" />
 
-    <property name="src.dir" value="main/java"/>
-    <property name="dist.dir" value="../release"/>
-    <property name="build.dir" value="${src.dir}"/>
+	<property name="src.dir" value="main/java" />
+	<property name="dist.dir" value="../release" />
+	<property name="build.dir" value="${src.dir}" />
 
-    <path id="master-classpath">
-        <fileset dir="${java.library.user}">
+	<path id="master-classpath">
+		<!-- <fileset dir="${java.library.user}">
             <include name="xcc.jar"/>
-        </fileset>
-        <fileset dir="${java.library.system}">
-            <include name="xcc.jar"/>
-        </fileset>
-        <pathelement path="${build.dir}"/>
-    </path>
-	
-	<target name="build" 
-			description="Compile main source tree java files">
-	  <mkdir dir="${build.dir}"/>
-	  <javac destdir="${build.dir}" target="1.5">
-      <compilerarg value="-Xlint"/>
-      <src path="${src.dir}"/>
-      <classpath refid="master-classpath"/>
-    </javac>
-    </target>
+        </fileset> -->
+		<fileset dir="${java.library.system}">
+			<include name="xcc.jar" />
+		</fileset>
+		<pathelement path="${build.dir}" />
+	</path>
 
-	<target name="jar" depends="build"
-			description="generate the jarfile" >
-	  <mkdir dir="${dist.dir}"/>
-	  <jar jarfile="${dist.dir}/${name}.jar" basedir="${build.dir}"
-		   compress="true" index="true"
-		   excludes="*.java,*.class,**/.*,**/*~"/>
+	<target name="build" description="Compile main source tree java files">
+		<mkdir dir="${build.dir}" />
+		<javac destdir="${build.dir}" target="1.5">
+			<compilerarg value="-Xlint" />
+			<src path="${src.dir}" />
+			<classpath refid="master-classpath" />
+		</javac>
+	</target>
+
+	<target name="jar" depends="build" description="generate the jarfile">
+		<mkdir dir="${dist.dir}" />
+		<jar jarfile="${dist.dir}/${name}.jar" basedir="${build.dir}" compress="true" index="true" excludes="*.java,*.class,**/.*,**/*~" />
 	</target>
 
 </project>
