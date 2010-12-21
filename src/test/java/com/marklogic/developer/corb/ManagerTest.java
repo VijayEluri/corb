@@ -198,7 +198,7 @@ public class ManagerTest {
 	}
 
 	private void invokeCorbWithArguments(String[] arguments) throws Exception {
-		logger.info("\n\nCurrently running the test: " + name.getMethodName());
+		logger.info("\nCurrently running the test: " + name.getMethodName());
 		Manager.main(arguments);
 	}
 }

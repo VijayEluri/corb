@@ -237,7 +237,7 @@ public class Manager implements Runnable {
 		configureLogger();
 		logger.info(NAME + " starting: " + versionMessage);
 		long maxMemory = Runtime.getRuntime().maxMemory() / (1024 * 1024);
-		logger.info("maximum heap size = " + maxMemory + " MiB\n");
+		logger.info("maximum heap size = " + maxMemory + " MiB");
 
 		prepareContentSource();
 		registerStatusInfo();
@@ -486,13 +486,12 @@ public class Manager implements Runnable {
 			}
 		}
 		logger.info(MessageFormat
-				.format("\nCORB CONFIGURATION STATUS:\nConfigured modules db: {0}\nConfigured XDBC root: {1}\nConfigured uri module: {2}\nConfigured process module: {3}\nInstall Modules First: {4}\nUninstall Modules After Processing: {5}\nConfigured modules root: {6}\nConfigured queue size: {7}\nConfigured number of Threads: {8}\n",
+				.format("\nCORB configuration status:\nConfigured modules db: {0}\nConfigured XDBC root: {1}\nConfigured uri module: {2}\nConfigured process module: {3}\nInstall Modules First: {4}\nUninstall Modules After Processing: {5}\nConfigured modules root: {6}\nConfigured queue size: {7}\nConfigured number of Threads: {8}\n",
 						options.getModulesDatabase(), options.getXDBC_ROOT(),
 						options.getUrisModule(), options.getProcessModule(),
 						options.isDoInstall(), options.isDoUninstall(),
 						options.getModuleRoot(), options.getQueueSize(),
 						options.getThreadCount()));
-
 	}
 
 	/**
