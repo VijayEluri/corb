@@ -263,7 +263,6 @@ public class Manager implements Runnable {
 			// fatal
 			throw new RuntimeException(e);
 		}
-		// CAN WE place the cleanup here
 
 		// Check whether the installed modules can be removed
 		if (options.isDoUninstall()) {
@@ -371,6 +370,17 @@ public class Manager implements Runnable {
 			contentSource = ssl ? ContentSourceFactory.newContentSource(
 					connectionUri, newTrustAnyoneOptions())
 					: ContentSourceFactory.newContentSource(connectionUri);
+			Session s = contentSource.newSession();
+			String driverVersion = s.getContentbaseMetaData()
+					.getDriverVersionString();
+			String serverVersion = s.getContentbaseMetaData()
+					.getServerVersionString();
+			logger.info("Using XCC Driver: " + driverVersion);
+			logger.info("Using MarkLogic Server Version: " + serverVersion);
+			if (!driverVersion.equals(serverVersion)) {
+				logger.warning("The XCC Driver appears to be of a different version to MarkLogic Server.  It is recommended that you remedy this for optimum performance.");
+			}
+			s.close();
 		} catch (XccConfigException e) {
 			logger.logException(connectionUri.toString(), e);
 			throw new RuntimeException(e);
@@ -378,6 +388,9 @@ public class Manager implements Runnable {
 			logger.logException(connectionUri.toString(), e);
 			throw new RuntimeException(e);
 		} catch (NoSuchAlgorithmException e) {
+			logger.logException(connectionUri.toString(), e);
+			throw new RuntimeException(e);
+		} catch (RequestException e) {
 			logger.logException(connectionUri.toString(), e);
 			throw new RuntimeException(e);
 		}
@@ -388,7 +401,7 @@ public class Manager implements Runnable {
 	 * there is a lot of code repetition
 	 */
 	private void cleanupInstalledModules() {
-		logger.fine("\n*****************************************\n*  UNINSTALL SELECTED - MODULE CLEANUP  *\n*****************************************");
+		logger.fine("Module uninstall specified - starting Module cleanup process.");
 		String[] resourceModules = new String[] { options.getUrisModule(),
 				options.getProcessModule() };
 		String modulesDatabase = options.getModulesDatabase();
@@ -473,7 +486,7 @@ public class Manager implements Runnable {
 			}
 		}
 		logger.info(MessageFormat
-				.format("CORB CONFIGURATION STATUS:\nConfigured modules db: {0}\nConfigured XDBC root: {1}\nConfigured uri module: {2}\nConfigured process module: {3}\nInstall Modules First: {4}\nUninstall Modules After Processing: {5}\nConfigured modules root: {6}\nConfigured queue size: {7}\nConfigured number of Threads: {8}\n",
+				.format("\nCORB CONFIGURATION STATUS:\nConfigured modules db: {0}\nConfigured XDBC root: {1}\nConfigured uri module: {2}\nConfigured process module: {3}\nInstall Modules First: {4}\nUninstall Modules After Processing: {5}\nConfigured modules root: {6}\nConfigured queue size: {7}\nConfigured number of Threads: {8}\n",
 						options.getModulesDatabase(), options.getXDBC_ROOT(),
 						options.getUrisModule(), options.getProcessModule(),
 						options.isDoInstall(), options.isDoUninstall(),
