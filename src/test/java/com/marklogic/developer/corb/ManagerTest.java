@@ -64,8 +64,9 @@ public class ManagerTest {
 			invokeCorbWithArguments(TestHelper.getFirstSampleInvocation());
 		} catch (Exception e) {
 			assertEquals(
-					"Should throw a permissions error: ",
-					"com.marklogic.xcc.exceptions.XQueryException: SEC-PERMDENIED: Permission denied\nin /insert",
+					"Should throw a URI privilege error: ",
+					"com.marklogic.xcc.exceptions.XQueryException: SEC-URIPRIV: URI privilege required\nin /insert",
+					// "com.marklogic.xcc.exceptions.XQueryException: SEC-PERMDENIED: Permission denied\nin /insert",
 					e.getLocalizedMessage());
 			throw e;
 		}
@@ -92,8 +93,9 @@ public class ManagerTest {
 			invokeCorbWithArguments(TestHelper.getThirdSampleInvocation());
 		} catch (Exception e) {
 			assertEquals(
-					"Should throw an XDMP-TEXTNODE: ",
-					"com.marklogic.xcc.exceptions.XQueryException: XDMP-TEXTNODE: /corb/basic-uri-selection.xqy -- Server unable to build program from non-text document\nin /corb/basic-uri-selection.xqy\nexpr: /corb/basic-uri-selection.xqy",
+					"Should throw an XDMP-MODNOTFOUND: ",
+					"com.marklogic.xcc.exceptions.XQueryException: XDMP-MODNOTFOUND: (err:XQST0059) Module /corb/basic-uri-selection.xqy not found\nin /corb/basic-uri-selection.xqy\nexpr:  ",
+					// "com.marklogic.xcc.exceptions.XQueryException: XDMP-TEXTNODE: /corb/basic-uri-selection.xqy -- Server unable to build program from non-text document\nin /corb/basic-uri-selection.xqy\nexpr: /corb/basic-uri-selection.xqy",
 					e.getLocalizedMessage());
 			throw e;
 		}
@@ -190,8 +192,9 @@ public class ManagerTest {
 					.getFullCorbArgsWithoutInstallingModules());
 		} catch (Exception e) {
 			assertEquals(
-					"Should throw an XDMP-TEXTNODE: ",
-					"com.marklogic.xcc.exceptions.XQueryException: XDMP-TEXTNODE: /corb/basic-uri-selection.xqy -- Server unable to build program from non-text document\nin /corb/basic-uri-selection.xqy\nexpr: /corb/basic-uri-selection.xqy",
+					"Should throw an XDMP-MODNOTFOUND: ",
+					"com.marklogic.xcc.exceptions.XQueryException: XDMP-MODNOTFOUND: (err:XQST0059) Module /corb/basic-uri-selection.xqy not found\nin /corb/basic-uri-selection.xqy\nexpr:  ",
+					// "com.marklogic.xcc.exceptions.XQueryException: XDMP-TEXTNODE: /corb/basic-uri-selection.xqy -- Server unable to build program from non-text document\nin /corb/basic-uri-selection.xqy\nexpr: /corb/basic-uri-selection.xqy",
 					e.getLocalizedMessage());
 			throw e;
 		}

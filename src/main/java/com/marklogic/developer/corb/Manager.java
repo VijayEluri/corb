@@ -46,6 +46,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import com.marklogic.developer.SimpleLogger;
+import com.marklogic.developer.TextUtil;
 import com.marklogic.xcc.AdhocQuery;
 import com.marklogic.xcc.Content;
 import com.marklogic.xcc.ContentCreateOptions;
@@ -485,13 +486,20 @@ public class Manager implements Runnable {
 				options.setXDBC_ROOT(item.asString());
 			}
 		}
-		logger.info(MessageFormat
-				.format("\n+============================+\n| CORB configuration status: |\n+============================+\nConfigured modules db: {0}\nConfigured XDBC root: {1}\nConfigured uri module: {2}\nConfigured process module: {3}\nInstall Modules First: {4}\nUninstall Modules After Processing: {5}\nConfigured modules root: {6}\nConfigured queue size: {7}\nConfigured number of Threads: {8}\n",
-						options.getModulesDatabase(), options.getXDBC_ROOT(),
-						options.getUrisModule(), options.getProcessModule(),
-						options.isDoInstall(), options.isDoUninstall(),
-						options.getModuleRoot(), options.getQueueSize(),
-						options.getThreadCount()));
+		String configStatus = TextUtil
+				.boxText(
+						MessageFormat
+								.format("CORB configuration status:\nConfigured modules db: {0}\nConfigured XDBC root: {1}\nConfigured uri module: {2}\nConfigured process module: {3}\nInstall Modules First: {4}\nUninstall Modules After Processing: {5}\nConfigured modules root: {6}\nConfigured queue size: {7}\nConfigured number of Threads: {8}\n",
+										options.getModulesDatabase(),
+										options.getXDBC_ROOT(),
+										options.getUrisModule(),
+										options.getProcessModule(),
+										options.isDoInstall(),
+										options.isDoUninstall(),
+										options.getModuleRoot(),
+										options.getQueueSize(),
+										options.getThreadCount()), 1);
+		logger.info("\n" + configStatus);
 	}
 
 	/**
