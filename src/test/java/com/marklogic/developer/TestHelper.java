@@ -79,7 +79,8 @@ public class TestHelper {
 
 	/* Other CORB defaults */
 	public static final String DEFAULT_THREADS = "16";
-	private static final String NO_MODULES_DB_USING_FS_INSTEAD = "0";
+
+	// private static final String NO_MODULES_DB_USING_FS_INSTEAD = "0";
 
 	/**
 	 * A bit overkill for CORBs purposes as all it really needs is the string as
