@@ -1,0 +1,6 @@
+# build.properties: Ant properties for building the app
+#
+
+java.library.system=/usr/share/java
+
+# end build.properties
