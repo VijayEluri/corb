@@ -1,1 +1,15 @@
+sudo: required
+
 language: java
+
+services:
+  - docker
+
+before_install:
+- git clone https://github.com/rlouapre/docker-ml.git
+- cd docker-ml/centos/6
+- curl -k -o MarkLogic.rpm http://developer.marklogic.com/download/binaries/8.0/MarkLogic-8.0-4.x86_64.rpm
+- docker build --rm=true -t "centos6-ml" .
+- docker run --name ml -d -p 8000:8000 -p 8001:8001 -p 8002:8002 -p 9200:9200 -p 9201:9201 -v /var/lib/docker:/var/opt/MarkLogic centos6-ml
+
+
