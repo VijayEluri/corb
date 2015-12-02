@@ -5,9 +5,8 @@ application server, from this, the Unit test scripts will be able to prepare all
 other databases, forests, Documents, indexes and Application Servers necessary for
 the CORB TestSuite.
 
-=======================================================
-The initial application server should be set up as such:
-=======================================================
+
+###The initial application server should be set up as such:###
 Port 			- 8010
 Database DB 	- Documents
 Modules DB		- Modules
@@ -15,9 +14,9 @@ Modules DB		- Modules
 Please note that no updates should occur in either the Documents or Modules DBs; this application server is just configured to give enough access to create the necessary
 resources required by the test suite.
 
-================================================================================
-Alternatively you can paste the following XQuery into CQ/DQ to create the server:
-================================================================================
+
+###Alternatively you can paste the following XQuery into CQ/DQ to create the server:###
+```xquery
 (: start of module :)
 xquery version "1.0-ml";
 
@@ -39,7 +38,7 @@ let $config := admin:xdbc-server-create(
 
 return admin:save-configuration($config)
 (: end of module :)
-
+```
 
 Both ports can be changed and currently these are configured by editing lines 43 and 44
 of src/test/java/com/marklogic/developer/TestHelper.java
