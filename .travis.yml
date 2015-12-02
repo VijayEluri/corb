@@ -1,9 +1,10 @@
 sudo: required
 
 language: java
-jdk:
-  - oraclejdk7
-  - openjdk7
+# Simplifying build by removing these for now
+# jdk:
+#  - oraclejdk7
+#  - openjdk7
 
 before_install:
  - chmod +x gradlew
