@@ -1,0 +1,18 @@
+group 'corb'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'groovy'
+apply plugin: 'java'
+
+sourceCompatibility = 1.7
+
+repositories {
+    mavenCentral()
+    maven { url "http://developer.marklogic.com/maven2" }
+}
+
+dependencies {
+    compile 'com.marklogic:marklogic-xcc:8.0.3'
+    compile 'org.codehaus.groovy:groovy-all:2.3.11'
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}

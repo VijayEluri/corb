@@ -7,9 +7,12 @@ the CORB TestSuite.
 
 
 ###The initial application server should be set up as such:###
-Port 			- 8010
-Database DB 	- Documents
-Modules DB		- Modules
+
+| Configure     | Value         |
+| ------------- | ------------- |
+| Port          | 8010          |
+| Database DB   | Documents     |
+| Modules  DB   | Modules       |
 
 Please note that no updates should occur in either the Documents or Modules DBs; this application server is just configured to give enough access to create the necessary
 resources required by the test suite.
@@ -43,6 +46,4 @@ return admin:save-configuration($config)
 Both ports can be changed and currently these are configured by editing lines 43 and 44
 of src/test/java/com/marklogic/developer/TestHelper.java
 
----------------------------------------------------------------------
-For more information see "http://marklogic.github.com/corb/":http://marklogic.github.com/corb/
----------------------------------------------------------------------
+For more information see [http://marklogic.github.com/corb/](http://marklogic.github.com/corb/)
