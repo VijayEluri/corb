@@ -41,9 +41,9 @@ public class TestHelper {
 	/* Connection URI management */
 	// private static final String BASE_CONNECTION_URI =
 	// "xcc://corb-user:corb@localhost";
-	private static final String BASE_ADMIN_CONNECTION_URI = "xcc://admin:admin@localhost";
+	private static final String BASE_ADMIN_CONNECTION_URI = "xcc://q:q@localhost";
 	private static final String BASE_CONNECTION_URI = "xcc://corb-user:corb@localhost";
-	private static final String INITIAL_CONNECTION_PORT = "8010";
+	private static final String INITIAL_CONNECTION_PORT = "8000";
 	private static final String TEST_APPSERVER_PORT = "9997";
 
 	/* Unit test database and forest names */
