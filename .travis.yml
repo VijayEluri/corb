@@ -6,13 +6,11 @@ language: java
 #  - oraclejdk7
 #  - openjdk7
 
-before_install:
- - chmod +x gradlew
-
 services:
 #  - docker
 
 before_install:
+ - chmod +x gradlew
 # docker setup very broken at this time
 # - git clone https://github.com/rlouapre/docker-ml.git
 # - cd docker-ml/centos/6
