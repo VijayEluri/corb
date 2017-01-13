@@ -1,5 +1,3 @@
-sudo: required
-
 language: java
 # Simplifying build by removing these for now
 # jdk:
